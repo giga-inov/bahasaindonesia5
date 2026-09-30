@@ -83,7 +83,7 @@
         <!-- SCREEN 3: LOGIN / REGISTER GURU -->
         <div id="screen-teacher-login" class="hidden w-full max-w-md bg-white rounded-3xl custom-shadow p-8 space-y-6">
             <div class="text-center">
-                <div class="text-3xl mb-2">👩‍‍🏫</div>
+                <div class="text-3xl mb-2">👩‍🏫</div>
                 <h2 class="text-xl font-extrabold text-slate-800">Login Guru / Pengajar</h2>
                 <p class="text-slate-500 text-sm">Pantau aktivitas & rekap nilai siswa secara real-time.</p>
             </div>
@@ -265,7 +265,7 @@
     <!-- SKRIP UTAMA & FIREBASE SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
-        import { getFirestore, collection, doc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
         import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         // KONFIGURASI FIREBASE ANDA
@@ -533,7 +533,18 @@
             } catch (e) {
                 console.error("Gagal sinkronisasi:", e);
             }
-        }
+        };
+
+        // Fungsi Hapus Data Siswa dari Dashboard Guru
+        window.deleteStudentRecord = async function(studentId) {
+            if(confirm("Apakah Anda yakin ingin menghapus data siswa ini dari daftar?")) {
+                try {
+                    await deleteDoc(doc(db, "student_progress", studentId));
+                } catch(e) {
+                    alert("Gagal menghapus data: " + e.message);
+                }
+            }
+        };
 
         // Realtime Listener untuk Dashboard Guru
         function startTeacherRealtimeListener() {
@@ -541,7 +552,9 @@
             unsubscribeTeacher = onSnapshot(collection(db, "student_progress"), (snapshot) => {
                 let students = [];
                 snapshot.forEach(docSnap => {
-                    students.push(docSnap.data());
+                    let data = docSnap.data();
+                    data.id = docSnap.id;
+                    students.push(data);
                 });
 
                 if(students.length === 0) {
@@ -566,7 +579,7 @@
                     const tr = document.createElement('tr');
                     tr.className = "border-b border-slate-100 hover:bg-slate-50/50 transition";
                     
-                    const timeString = s.lastActive?.toDate ? s.lastActive.toDate().toLocaleTimeString('id-ID') : 'Baru saja';
+                    const timeString = s.lastActive?.toDate ? s.lastActive.toDate().toLocaleTimeString('id-ID', { hour: '2-digit', minute: '2-digit' }) : 'Baru saja';
                     const statusBadge = s.status === "Sudah Selesai" 
                         ? `<span class="px-2.5 py-1 bg-emerald-100 text-emerald-800 rounded-full text-xs font-bold">Selesai</span>`
                         : `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">Mengerjakan</span>`;
@@ -575,12 +588,12 @@
                         <td class="p-3.5 font-bold text-slate-800">${s.name || '-'}</td>
                         <td class="p-3.5">${s.classCode || '5A'}</td>
                         <td class="p-3.5">${statusBadge}</td>
-                        <td class="p-3.5">${s.currentQuestion || 1} / 50</td>
+                        <td class="p-3.5">${s.currentQuestion || 1}/50</td>
                         <td class="p-3.5 font-extrabold text-emerald-600">${s.score || 0}</td>
                         <td class="p-3.5"><span class="text-sky-600 font-bold">${s.correctAnswers || 0}</span> / <span class="text-rose-600 font-bold">${s.wrongAnswers || 0}</span></td>
                         <td class="p-3.5 text-xs text-slate-400">${timeString}</td>
                         <td class="p-3.5 text-center">
-                            <span class="text-xs text-slate-400 italic">Aktif</span>
+                            <button onclick="deleteStudentRecord('${s.id}')" class="px-2.5 py-1 bg-rose-50 hover:bg-rose-100 text-rose-600 rounded-lg text-xs font-bold transition">Hapus</button>
                         </td>
                     `;
                     tbody.appendChild(tr);
