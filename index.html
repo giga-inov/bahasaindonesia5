@@ -35,10 +35,10 @@
         </div>
     </header>
 
-    <!-- Konten Utama (Aplikasi & Dashboard) -->
+    <!-- Konten Utama -->
     <main class="flex-grow flex items-center justify-center p-4 sm:p-6">
         
-        <!-- SCREEN 1: PILIH PERAN (HALAMAN UTAMA) -->
+        <!-- SCREEN 1: PILIH PERAN -->
         <div id="screen-home" class="w-full max-w-md bg-white rounded-3xl custom-shadow p-8 text-center space-y-6">
             <div class="w-20 h-20 bg-emerald-100 rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-inner">🎒</div>
             <div>
@@ -50,7 +50,7 @@
                     👨‍🎓 Masuk sebagai Siswa
                 </button>
                 <button onclick="switchScreen('screen-teacher-login')" class="w-full py-3.5 px-4 bg-white hover:bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold rounded-2xl transition flex items-center justify-center gap-2">
-                    👩‍🏫 Login Guru / Pengajar
+                    👩‍‍🏫 Masuk Dashboard Guru
                 </button>
             </div>
         </div>
@@ -60,7 +60,7 @@
             <div class="text-center">
                 <div class="text-3xl mb-2">👋</div>
                 <h2 class="text-xl font-extrabold text-slate-800">Identitas Siswa</h2>
-                <p class="text-slate-500 text-sm">Masukkan nama lengkap dan kode kelas Anda.</p>
+                <p class="text-slate-500 text-sm">Masukkan nama lengkap dan kelas Anda.</p>
             </div>
             <div class="space-y-4">
                 <div>
@@ -68,7 +68,7 @@
                     <input type="text" id="input-student-name" placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
                 </div>
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Kode Kelas</label>
+                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Kelas</label>
                     <input type="text" id="input-class-code" value="5A" placeholder="Contoh: 5A" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium uppercase">
                 </div>
                 <button onclick="handleStudentLogin()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
@@ -80,30 +80,22 @@
             </div>
         </div>
 
-        <!-- SCREEN 3: LOGIN / REGISTER GURU -->
+        <!-- SCREEN 3: MASUK GURU TANPA EMAIL -->
         <div id="screen-teacher-login" class="hidden w-full max-w-md bg-white rounded-3xl custom-shadow p-8 space-y-6">
             <div class="text-center">
                 <div class="text-3xl mb-2">👩‍🏫</div>
-                <h2 class="text-xl font-extrabold text-slate-800">Login Guru / Pengajar</h2>
-                <p class="text-slate-500 text-sm">Pantau aktivitas & rekap nilai siswa secara real-time.</p>
+                <h2 class="text-xl font-extrabold text-slate-800">Akses Dashboard Guru</h2>
+                <p class="text-slate-500 text-sm">Masukkan nama Anda untuk memantau rekap nilai siswa.</p>
             </div>
             <div class="space-y-4">
                 <div>
-                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Email Guru</label>
-                    <input type="email" id="input-teacher-email" placeholder="guru@email.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
+                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Nama Guru / Pengajar</label>
+                    <input type="text" id="input-teacher-name" placeholder="Contoh: Bu Siti, S.Pd." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
                 </div>
-                <div>
-                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Password</label>
-                    <input type="password" id="input-teacher-password" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
-                </div>
-                <p id="teacher-auth-error" class="text-xs text-rose-600 font-semibold hidden text-center">Mohon isi email dan password dengan benar.</p>
                 <button onclick="handleTeacherLogin()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
-                    Masuk ke Dashboard
+                    Buka Dashboard 📊
                 </button>
-                <button onclick="handleTeacherRegister()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition">
-                    Daftar Akun Guru Baru
-                </button>
-                <button onclick="switchScreen('screen-home')" class="w-full py-2 text-slate-500 hover:text-slate-800 font-semibold text-sm transition">
+                <button onclick="switchScreen('screen-home')" class="w-full py-2.5 text-slate-500 hover:text-slate-800 font-semibold text-sm transition">
                     ← Kembali ke Halaman Utama
                 </button>
             </div>
@@ -115,19 +107,14 @@
                 <div>
                     <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-extrabold rounded-full uppercase tracking-wider">Mode Guru</span>
                     <h2 class="text-2xl font-extrabold text-slate-800 mt-1">DASHBOARD GURU</h2>
-                    <p class="text-slate-500 text-sm">Monitoring real-time aktivitas dan nilai siswa kelas 5</p>
+                    <p id="teacher-welcome-label" class="text-slate-500 text-sm">Monitoring real-time aktivitas dan nilai siswa</p>
                 </div>
-                <div class="flex items-center gap-2">
-                    <button onclick="alert('Kode Kelas Aktif: 5A')" class="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-sm transition">
-                        🏫 Kelola Kelas / Kode
-                    </button>
-                    <button onclick="handleLogout()" class="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-sm transition">
-                        Keluar
-                    </button>
-                </div>
+                <button onclick="handleLogout()" class="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-sm transition">
+                    Keluar
+                </button>
             </div>
 
-            <!-- Kartu Statistik Singkat -->
+            <!-- Kartu Statistik -->
             <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
                 <div class="p-5 rounded-2xl bg-sky-50 border border-sky-100">
                     <p class="text-xs font-bold uppercase text-sky-600">Jumlah Siswa</p>
@@ -147,11 +134,11 @@
                 </div>
             </div>
 
-            <!-- Tabel Monitoring Siswa -->
+            <!-- Tabel Siswa -->
             <div class="space-y-3">
                 <div class="flex justify-between items-center">
                     <h3 class="font-extrabold text-slate-800 text-lg">📊 Daftar Monitoring Siswa (Real-time)</h3>
-                    <span class="text-xs text-slate-400 font-medium">Pembaruan otomatis via Firestore</span>
+                    <span class="text-xs text-slate-400 font-medium">Pembaruan otomatis</span>
                 </div>
                 <div class="overflow-x-auto border border-slate-100 rounded-2xl">
                     <table class="w-full text-left border-collapse">
@@ -169,7 +156,7 @@
                         </thead>
                         <tbody id="teacher-student-table-body" class="text-sm font-medium text-slate-700">
                             <tr>
-                                <td colspan="8" class="p-8 text-center text-slate-400">Memuat data siswa dari database...</td>
+                                <td colspan="8" class="p-8 text-center text-slate-400">Memuat data siswa...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -179,10 +166,9 @@
 
         <!-- SCREEN 5: GAME / KUIS UTAMA -->
         <div id="screen-game" class="hidden w-full max-w-3xl bg-white rounded-3xl custom-shadow p-6 sm:p-8 space-y-6">
-            <!-- Header Kuis -->
             <div class="flex justify-between items-center border-b border-slate-100 pb-4">
                 <div>
-                    <span id="quiz-chapter-tag" class="text-xs font-bold uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Bab 1: Menulis Cerita</span>
+                    <span id="quiz-chapter-tag" class="text-xs font-bold uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Bab 1</span>
                     <h2 id="quiz-counter-text" class="text-lg font-extrabold text-slate-800 mt-1">Soal 1 dari 50</h2>
                 </div>
                 <div class="text-right">
@@ -191,28 +177,21 @@
                 </div>
             </div>
 
-            <!-- Progress Bar -->
             <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
                 <div id="quiz-progress-bar" class="bg-emerald-500 h-full w-2 transition-all duration-300"></div>
             </div>
 
-            <!-- Area Soal -->
             <div class="space-y-4">
                 <div class="flex items-center gap-2">
                     <span id="quiz-difficulty-tag" class="px-2.5 py-0.5 rounded-md bg-sky-100 text-sky-800 text-xs font-bold">Mudah</span>
-                    <span id="quiz-topic-tag" class="text-xs text-slate-400 font-medium">Subbab: Ide Pokok Paragraf</span>
+                    <span id="quiz-topic-tag" class="text-xs text-slate-400 font-medium">Subbab</span>
                 </div>
                 <p id="quiz-question-text" class="text-base sm:text-lg font-bold text-slate-800 leading-relaxed">
                     Memuat pertanyaan...
                 </p>
-
-                <!-- Pilihan Ganda -->
-                <div id="quiz-options-container" class="space-y-3 pt-2">
-                    <!-- Tombol pilihan ganda digenerate oleh JS -->
-                </div>
+                <div id="quiz-options-container" class="space-y-3 pt-2"></div>
             </div>
 
-            <!-- Feedback Kotak Penjelasan -->
             <div id="quiz-feedback-box" class="hidden rounded-2xl p-5 border space-y-3">
                 <h4 id="quiz-feedback-title" class="font-extrabold text-base"></h4>
                 <p id="feedback-text" class="text-sm leading-relaxed"></p>
@@ -222,17 +201,17 @@
             </div>
         </div>
 
-        <!-- SCREEN 6: HASIL KUIS AKHIR -->
+        <!-- SCREEN 6: HASIL KUIS -->
         <div id="screen-result" class="hidden w-full max-w-md bg-white rounded-3xl custom-shadow p-8 text-center space-y-6">
             <div class="w-20 h-20 bg-emerald-100 rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-inner">🏆</div>
             <div>
                 <h2 id="result-congrats-title" class="text-2xl font-extrabold text-slate-800">Selamat!</h2>
-                <p class="text-slate-500 text-sm mt-1">Kamu telah menyelesaikan seluruh rangkaian 50 soal latihan.</p>
+                <p class="text-slate-500 text-sm mt-1">Kamu telah menyelesaikan seluruh rangkaian 50 soal.</p>
             </div>
 
             <div class="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl">
                 <div>
-                    <span class="text-xs text-slate-400 font-bold block">SKOR AKHIR</span>
+                    <span class="text-xs text-slate-400 font-bold block">SKOR</span>
                     <span id="final-score" class="text-xl font-extrabold text-emerald-600">0</span>
                 </div>
                 <div>
@@ -257,16 +236,14 @@
 
     </main>
 
-    <!-- Footer Sederhana -->
     <footer class="text-center py-4 text-xs text-slate-400 font-medium">
-        giga inovation • Petualangan Belajar Bahasa Indonesia Kelas 5 SD/MI
+        giga inovation (081329200985) • Petualangan Belajar Bahasa Indonesia Kelas 5 SD/MI
     </footer>
 
     <!-- SKRIP UTAMA & FIREBASE SDK -->
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
         import { getFirestore, collection, doc, setDoc, deleteDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
-        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
         // KONFIGURASI FIREBASE ANDA
         const firebaseConfig = {
@@ -274,18 +251,17 @@
             authDomain: "bahasaindonesia5-843aa.firebaseapp.com",
             projectId: "bahasaindonesia5-843aa",
             storageBucket: "bahasaindonesia5-843aa.appspot.com",
-            messagingSenderId: "GANTI_SENDER_ID",
-            appId: "GANTI_APP_ID"
+            messagingSenderId: "GANDER_ID",
+            appId: "APP_ID"
         };
 
         const app = initializeApp(firebaseConfig);
         const db = getFirestore(app);
-        const auth = getAuth(app);
         window.db = db;
 
-        // Variabel Status Game
         let studentName = "";
         let studentClass = "5A";
+        let teacherName = "";
         let score = 0;
         let correctCount = 0;
         let wrongCount = 0;
@@ -294,7 +270,7 @@
         let isAudioEnabled = true;
         let unsubscribeTeacher = null;
 
-        // Data Bank Soal (50 Soal Bahasa Indonesia Kelas 5)
+        // 50 Soal Latihan
         const quizQuestions = [
             { question: "Apa gagasan utama dalam sebuah paragraf?", options: ["Kalimat penjelas", "Ide atau pokok pembahasan utama", "Kesimpulan akhir cerita", "Judul bacaan"], correct: 1, chapter: "Bab 1", difficulty: "Mudah", topic: "Ide Pokok", explanation: "Gagasan utama adalah ide atau pokok pembahasan utama yang menjadi dasar pengembangan sebuah paragraf." },
             { question: "Bagian teks laporan hasil pengamatan yang berisi uraian secara rinci disebut...", options: ["Pendahuluan", "Kesimpulan", "Isi / Deskripsi bagian", "Kata penutup"], correct: 2, chapter: "Bab 1", difficulty: "Mudah", topic: "Laporan", explanation: "Deskripsi bagian memuat rincian objek atau peristiwa yang dilaporkan secara lengkap." },
@@ -303,7 +279,6 @@
             { question: "Sinonim dari kata 'canggih' adalah...", options: ["Kuno", "Modern / Mutakhir", "Sederhana", "Lambat"], correct: 1, chapter: "Bab 2", difficulty: "Mudah", topic: "Kosakata", explanation: "Canggih berarti menggunakan teknologi modern atau mutakhir." }
         ];
 
-        // Lengkapi simulasi 50 soal agar permainan penuh
         for(let i=6; i<=50; i++) {
             quizQuestions.push({
                 question: `Pertanyaan latihan ke-${i} seputar materi Bahasa Indonesia Kelas 5 SD?`,
@@ -367,6 +342,18 @@
             document.getElementById('logout-btn').classList.remove('hidden');
             switchScreen('screen-game');
             syncProgressToFirebase();
+        };
+
+        window.handleTeacherLogin = function() {
+            const nameInput = document.getElementById('input-teacher-name').value.trim();
+            if(!nameInput) {
+                alert("Mohon masukkan nama guru terlebih dahulu!");
+                return;
+            }
+            teacherName = nameInput;
+            document.getElementById('teacher-welcome-label').textContent = `Pengajar: ${teacherName} • Monitoring Real-time`;
+            document.getElementById('logout-btn').classList.remove('hidden');
+            switchScreen('screen-teacher-dashboard');
         };
 
         window.loadQuestion = function() {
@@ -473,49 +460,13 @@
             switchScreen('screen-game');
         };
 
-        // Fungsi Autentikasi Guru
-        window.handleTeacherLogin = async function() {
-            const email = document.getElementById('input-teacher-email').value;
-            const pass = document.getElementById('input-teacher-password').value;
-            const errEl = document.getElementById('teacher-auth-error');
-            
-            try {
-                await signInWithEmailAndPassword(auth, email, pass);
-                errEl.classList.add('hidden');
-                document.getElementById('logout-btn').classList.remove('hidden');
-                switchScreen('screen-teacher-dashboard');
-            } catch (error) {
-                errEl.classList.remove('hidden');
-            }
-        };
-
-        window.handleTeacherRegister = async function() {
-            const email = document.getElementById('input-teacher-email').value;
-            const pass = document.getElementById('input-teacher-password').value;
-            const errEl = document.getElementById('teacher-auth-error');
-            
-            try {
-                await createUserWithEmailAndPassword(auth, email, pass);
-                alert("Akun guru berhasil dibuat dan langsung masuk!");
-                errEl.classList.add('hidden');
-                document.getElementById('logout-btn').classList.remove('hidden');
-                switchScreen('screen-teacher-dashboard');
-            } catch (error) {
-                errEl.textContent = "Gagal mendaftar: " + error.message;
-                errEl.classList.remove('hidden');
-            }
-        };
-
-        window.handleLogout = async function() {
-            try {
-                await signOut(auth);
-            } catch(e) {}
+        window.handleLogout = function() {
             studentName = "";
+            teacherName = "";
             document.getElementById('logout-btn').classList.add('hidden');
             switchScreen('screen-home');
         };
 
-        // Sinkronisasi Realtime ke Firestore
         async function syncProgressToFirebase() {
             if(!db || !studentName) return;
             try {
@@ -535,7 +486,6 @@
             }
         };
 
-        // Fungsi Hapus Data Siswa dari Dashboard Guru
         window.deleteStudentRecord = async function(studentId) {
             if(confirm("Apakah Anda yakin ingin menghapus data siswa ini dari daftar?")) {
                 try {
@@ -546,7 +496,6 @@
             }
         };
 
-        // Realtime Listener untuk Dashboard Guru
         function startTeacherRealtimeListener() {
             const tbody = document.getElementById('teacher-student-table-body');
             unsubscribeTeacher = onSnapshot(collection(db, "student_progress"), (snapshot) => {
