@@ -50,7 +50,7 @@
                     👨‍🎓 Masuk sebagai Siswa
                 </button>
                 <button onclick="switchScreen('screen-teacher-login')" class="w-full py-3.5 px-4 bg-white hover:bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold rounded-2xl transition flex items-center justify-center gap-2">
-                    👩‍‍🏫 Masuk Dashboard Guru
+                    👩‍🏫 Masuk Dashboard Guru
                 </button>
             </div>
         </div>
@@ -80,7 +80,7 @@
             </div>
         </div>
 
-        <!-- SCREEN 3: MASUK GURU TANPA EMAIL -->
+        <!-- SCREEN 3: MASUK GURU -->
         <div id="screen-teacher-login" class="hidden w-full max-w-md bg-white rounded-3xl custom-shadow p-8 space-y-6">
             <div class="text-center">
                 <div class="text-3xl mb-2">👩‍🏫</div>
@@ -90,7 +90,7 @@
             <div class="space-y-4">
                 <div>
                     <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Nama Guru / Pengajar</label>
-                    <input type="text" id="input-teacher-name" placeholder="Contoh: Bu Siti, S.Pd." class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
+                    <input type="text" id="input-teacher-name" placeholder="Contoh: Aris Purwanto" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
                 </div>
                 <button onclick="handleTeacherLogin()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
                     Buka Dashboard 📊
@@ -195,7 +195,7 @@
             <div id="quiz-feedback-box" class="hidden rounded-2xl p-5 border space-y-3">
                 <h4 id="quiz-feedback-title" class="font-extrabold text-base"></h4>
                 <p id="feedback-text" class="text-sm leading-relaxed"></p>
-                <button onclick="proceedNextQuestion()" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-sm transition">
+                <button type="button" id="btn-next-question" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-sm transition shadow-md">
                     Lanjut Soal Berikutnya →
                 </button>
             </div>
@@ -259,37 +259,81 @@
         const db = getFirestore(app);
         window.db = db;
 
-        let studentName = "";
-        let studentClass = "5A";
-        let teacherName = "";
-        let score = 0;
-        let correctCount = 0;
-        let wrongCount = 0;
-        let currentQuestionIndex = 0;
-        let userAnswers = {};
+        let studentName = localStorage.getItem('gi_student_name') || "";
+        let studentClass = localStorage.getItem('gi_student_class') || "5A";
+        let teacherName = localStorage.getItem('gi_teacher_name') || "";
+        let score = parseInt(localStorage.getItem('gi_score') || "0");
+        let correctCount = parseInt(localStorage.getItem('gi_correct') || "0");
+        let wrongCount = parseInt(localStorage.getItem('gi_wrong') || "0");
+        let currentQuestionIndex = parseInt(localStorage.getItem('gi_q_index') || "0");
         let isAudioEnabled = true;
         let unsubscribeTeacher = null;
+        let currentCorrectOptionIndex = 0; // Menyimpan posisi jawaban benar yang diacak
 
-        // 50 Soal Latihan
-        const quizQuestions = [
-            { question: "Apa gagasan utama dalam sebuah paragraf?", options: ["Kalimat penjelas", "Ide atau pokok pembahasan utama", "Kesimpulan akhir cerita", "Judul bacaan"], correct: 1, chapter: "Bab 1", difficulty: "Mudah", topic: "Ide Pokok", explanation: "Gagasan utama adalah ide atau pokok pembahasan utama yang menjadi dasar pengembangan sebuah paragraf." },
-            { question: "Bagian teks laporan hasil pengamatan yang berisi uraian secara rinci disebut...", options: ["Pendahuluan", "Kesimpulan", "Isi / Deskripsi bagian", "Kata penutup"], correct: 2, chapter: "Bab 1", difficulty: "Mudah", topic: "Laporan", explanation: "Deskripsi bagian memuat rincian objek atau peristiwa yang dilaporkan secara lengkap." },
-            { question: "Manakah penulisan huruf kapital yang benar pada nama tempat?", options: ["sungai kapuas", "Sungai Kapuas", "sungai Kapuas", "Sungai kapuas"], correct: 1, chapter: "Bab 1", difficulty: "Sedang", topic: "Ejaan", explanation: "Nama unsur geografi yang diikuti nama diri harus diawali huruf kapital pada kedua kata." },
-            { question: "Kalimat yang berisi pendapat atau gagasan pribadi seseorang disebut kalimat...", options: ["Fakta", "Opini", "Tanya", "Perintah"], correct: 1, chapter: "Bab 2", difficulty: "Mudah", topic: "Fakta & Opini", explanation: "Opini bersifat subjektif dan memuat pandangan atau pendapat pribadi." },
-            { question: "Sinonim dari kata 'canggih' adalah...", options: ["Kuno", "Modern / Mutakhir", "Sederhana", "Lambat"], correct: 1, chapter: "Bab 2", difficulty: "Mudah", topic: "Kosakata", explanation: "Canggih berarti menggunakan teknologi modern atau mutakhir." }
+        // Master Soal Asli (Pilihan pertama / indeks 0 selalu jawaban benar di bank data)
+        const rawQuizQuestions = [
+            { question: "Apa gagasan utama dalam sebuah paragraf?", options: ["Ide atau pokok pembahasan utama", "Kalimat penjelas tambahan", "Kesimpulan akhir cerita", "Judul bacaan singkat"], chapter: "Bab 1", difficulty: "Mudah", topic: "Ide Pokok", explanation: "Gagasan utama adalah ide atau pokok pembahasan utama yang menjadi dasar pengembangan sebuah paragraf." },
+            { question: "Bagian teks laporan hasil pengamatan yang berisi uraian secara rinci disebut...", options: ["Isi / Deskripsi bagian", "Pendahuluan laporan", "Kesimpulan akhir", "Kata penutup pengamatan"], chapter: "Bab 1", difficulty: "Mudah", topic: "Laporan", explanation: "Deskripsi bagian memuat rincian objek atau peristiwa yang dilaporkan secara lengkap." },
+            { question: "Manakah penulisan huruf kapital yang benar pada nama unsur geografi?", options: ["Sungai Kapuas", "sungai kapuas", "sungai Kapuas", "Sungai kapuas"], chapter: "Bab 1", difficulty: "Sedang", topic: "Ejaan", explanation: "Nama unsur geografi yang diikuti nama diri harus diawali huruf kapital pada kedua kata." },
+            { question: "Kalimat yang berisi pendapat atau gagasan pribadi seseorang disebut kalimat...", options: ["Opini", "Fakta mutlak", "Kalimat tanya", "Kalimat perintah"], chapter: "Bab 2", difficulty: "Mudah", topic: "Fakta & Opini", explanation: "Opini bersifat subjektif dan memuat pandangan atau pendapat pribadi." },
+            { question: "Sinonim dari kata 'canggih' adalah...", options: ["Modern / Mutakhir", "Kuno", "Sederhana", "Lambat"], chapter: "Bab 2", difficulty: "Mudah", topic: "Kosakata", explanation: "Canggih berarti menggunakan teknologi modern atau mutakhir." }
         ];
 
+        // Generate otomatis sampai 50 soal dengan variasi posisi jawaban benar
         for(let i=6; i<=50; i++) {
-            quizQuestions.push({
+            // Kita rotasi posisi jawaban benarnya agar tersebar di indeks 0, 1, 2, atau 3 (A, B, C, D)
+            const correctPos = i % 4; 
+            let opts = [
+                `Pilihan jawaban benar untuk nomor ${i}`,
+                `Pilihan pengcoh pertama nomor ${i}`,
+                `Pilihan pengecoh kedua nomor ${i}`,
+                `Pilihan alternatif salah nomor ${i}`
+            ];
+            // Letakkan teks jawaban benar di posisi yang bervariasi
+            let temp = opts[0];
+            opts[0] = opts[correctPos];
+            opts[correctPos] = temp;
+
+            rawQuizQuestions.push({
                 question: `Pertanyaan latihan ke-${i} seputar materi Bahasa Indonesia Kelas 5 SD?`,
-                options: ["Pilihan jawaban A yang tepat", "Pilihan jawaban B yang benar", "Pilihan jawaban C alternatif", "Pilihan jawaban D salah"],
-                correct: 0,
+                options: opts,
+                correctText: opts[correctPos], // Simpan teks jawaban benar asli
                 chapter: `Bab ${Math.ceil(i/10)}`,
                 difficulty: i > 35 ? "Sulit" : (i > 15 ? "Sedang" : "Mudah"),
                 topic: "Pemahaman Umum",
                 explanation: `Penjelasan lengkap untuk soal nomor ${i} sesuai kurikulum merdeka kelas 5.`
             });
         }
+
+        // Pastikan 5 soal pertama juga memiliki properti correctText
+        rawQuizQuestions.slice(0, 5).forEach(q => {
+            q.correctText = q.options[0]; // Karena di data asli indeks 0 adalah benar
+        });
+
+        // Cek Sesi Tersimpan Saat Halaman Dimuat
+        window.addEventListener('DOMContentLoaded', () => {
+            if (teacherName) {
+                document.getElementById('teacher-welcome-label').textContent = `Pengajar: ${teacherName} • Monitoring Real-time`;
+                document.getElementById('logout-btn').classList.remove('hidden');
+                switchScreen('screen-teacher-dashboard');
+            } else if (studentName) {
+                document.getElementById('logout-btn').classList.remove('hidden');
+                if (currentQuestionIndex >= 50) {
+                    switchScreen('screen-result');
+                } else {
+                    switchScreen('screen-game');
+                }
+            } else {
+                switchScreen('screen-home');
+            }
+
+            const nextBtn = document.getElementById('btn-next-question');
+            if (nextBtn) {
+                nextBtn.onclick = function() {
+                    proceedNextQuestion();
+                };
+            }
+        });
 
         window.switchScreen = function(screenId) {
             ['screen-home', 'screen-student-login', 'screen-teacher-login', 'screen-teacher-dashboard', 'screen-game', 'screen-result'].forEach(id => {
@@ -337,7 +381,13 @@
             correctCount = 0;
             wrongCount = 0;
             currentQuestionIndex = 0;
-            userAnswers = {};
+
+            localStorage.setItem('gi_student_name', studentName);
+            localStorage.setItem('gi_student_class', studentClass);
+            localStorage.setItem('gi_score', score);
+            localStorage.setItem('gi_correct', correctCount);
+            localStorage.setItem('gi_wrong', wrongCount);
+            localStorage.setItem('gi_q_index', currentQuestionIndex);
 
             document.getElementById('logout-btn').classList.remove('hidden');
             switchScreen('screen-game');
@@ -351,18 +401,19 @@
                 return;
             }
             teacherName = nameInput;
+            localStorage.setItem('gi_teacher_name', teacherName);
             document.getElementById('teacher-welcome-label').textContent = `Pengajar: ${teacherName} • Monitoring Real-time`;
             document.getElementById('logout-btn').classList.remove('hidden');
             switchScreen('screen-teacher-dashboard');
         };
 
         window.loadQuestion = function() {
-            if(currentQuestionIndex >= quizQuestions.length) {
+            if(currentQuestionIndex >= rawQuizQuestions.length) {
                 finishQuiz();
                 return;
             }
 
-            const q = quizQuestions[currentQuestionIndex];
+            const q = rawQuizQuestions[currentQuestionIndex];
             document.getElementById('quiz-counter-text').textContent = `Soal ${currentQuestionIndex + 1} dari 50`;
             document.getElementById('quiz-chapter-tag').textContent = q.chapter;
             document.getElementById('quiz-difficulty-tag').textContent = q.difficulty;
@@ -373,34 +424,46 @@
             document.getElementById('quiz-progress-bar').style.width = `${percent}%`;
             document.getElementById('quiz-question-text').textContent = q.question;
 
+            // ACAK URUTAN OPSI JAWABAN SETIAP KALI SOAL DIMUAT
+            let shuffledOptions = [...q.options];
+            // Algoritma Fisher-Yates untuk mengacak array opsi secara merata
+            for (let i = shuffledOptions.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [shuffledOptions[i], shuffledOptions[j]] = [shuffledOptions[j], shuffledOptions[i]];
+            }
+
+            // Temukan di mana indeks baru untuk jawaban yang benar setelah diacak
+            currentCorrectOptionIndex = shuffledOptions.indexOf(q.correctText);
+
             const container = document.getElementById('quiz-options-container');
             container.innerHTML = "";
 
-            q.options.forEach((opt, idx) => {
+            shuffledOptions.forEach((opt, idx) => {
                 const btn = document.createElement('button');
+                btn.type = "button";
                 btn.className = "w-full text-left bg-white hover:bg-emerald-50 border-2 border-slate-200 hover:border-emerald-500 rounded-2xl p-4 font-semibold text-slate-700 transition flex items-center justify-between shadow-sm";
                 btn.innerHTML = `<span>${opt}</span> <span class="w-7 h-7 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-400 font-bold">${String.fromCharCode(65 + idx)}</span>`;
-                btn.onclick = () => selectAnswer(idx);
+                btn.onclick = () => selectAnswer(idx, shuffledOptions);
                 container.appendChild(btn);
             });
 
             document.getElementById('quiz-feedback-box').classList.add('hidden');
+            isAnswerSubmitted = false;
             syncProgressToFirebase();
         };
 
         let isAnswerSubmitted = false;
-        window.selectAnswer = function(selectedIndex) {
+        window.selectAnswer = function(selectedIndex, currentShuffledOptions) {
             if(isAnswerSubmitted) return;
             isAnswerSubmitted = true;
 
-            const q = quizQuestions[currentQuestionIndex];
-            const isCorrect = (selectedIndex === q.correct);
-            userAnswers[currentQuestionIndex] = selectedIndex;
+            const q = rawQuizQuestions[currentQuestionIndex];
+            const isCorrect = (selectedIndex === currentCorrectOptionIndex);
 
             const buttons = document.getElementById('quiz-options-container').children;
             for(let i=0; i<buttons.length; i++) {
                 buttons[i].disabled = true;
-                if(i === q.correct) {
+                if(i === currentCorrectOptionIndex) {
                     buttons[i].className = "w-full text-left bg-emerald-100 border-2 border-emerald-500 rounded-2xl p-4 font-semibold text-emerald-900 shadow-sm";
                 } else if(i === selectedIndex && !isCorrect) {
                     buttons[i].className = "w-full text-left bg-rose-100 border-2 border-rose-500 rounded-2xl p-4 font-semibold text-rose-900 shadow-sm";
@@ -425,19 +488,23 @@
             } else {
                 wrongCount++;
                 feedbackBox.className = "rounded-2xl p-5 border bg-rose-50 border-rose-200 space-y-2";
-                feedbackTitle.innerHTML = `<span class="text-rose-700">✕ BELUM TEPAT. Jawaban yang benar adalah: <strong>${q.options[q.correct]}</strong></span>`;
+                feedbackTitle.innerHTML = `<span class="text-rose-700">✕ BELUM TEPAT. Jawaban yang benar adalah: <strong>${q.correctText}</strong></span>`;
                 feedbackText.className = "text-sm text-rose-900 leading-relaxed";
                 feedbackText.textContent = q.explanation;
                 speakText("Belum tepat. Mari pelajari pembahasannya.");
             }
 
             document.getElementById('quiz-score-display').textContent = score;
+
+            localStorage.setItem('gi_score', score);
+            localStorage.setItem('gi_correct', correctCount);
+            localStorage.setItem('gi_wrong', wrongCount);
             syncProgressToFirebase();
         };
 
         window.proceedNextQuestion = function() {
-            isAnswerSubmitted = false;
             currentQuestionIndex++;
+            localStorage.setItem('gi_q_index', currentQuestionIndex);
             loadQuestion();
         };
 
@@ -456,13 +523,17 @@
             correctCount = 0;
             wrongCount = 0;
             currentQuestionIndex = 0;
-            userAnswers = {};
+            localStorage.setItem('gi_score', score);
+            localStorage.setItem('gi_correct', correctCount);
+            localStorage.setItem('gi_wrong', wrongCount);
+            localStorage.setItem('gi_q_index', currentQuestionIndex);
             switchScreen('screen-game');
         };
 
         window.handleLogout = function() {
             studentName = "";
             teacherName = "";
+            localStorage.clear();
             document.getElementById('logout-btn').classList.add('hidden');
             switchScreen('screen-home');
         };
@@ -534,7 +605,7 @@
                         : `<span class="px-2.5 py-1 bg-amber-100 text-amber-800 rounded-full text-xs font-bold">Mengerjakan</span>`;
 
                     tr.innerHTML = `
-                        <td class="p-3.5 font-bold text-slate-800">${s.name || '-'}</td>
+                        <th class="p-3.5 font-bold text-slate-800">${s.name || '-'}</th>
                         <td class="p-3.5">${s.classCode || '5A'}</td>
                         <td class="p-3.5">${statusBadge}</td>
                         <td class="p-3.5">${s.currentQuestion || 1}/50</td>
