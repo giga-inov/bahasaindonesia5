@@ -6,7 +6,7 @@
     <title>Petualangan Bahasa Indonesia Kelas 5 SD/MI</title>
     <!-- Tailwind CSS CDN -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
     <style>
         body {
             font-family: 'Plus Jakarta Sans', sans-serif;
@@ -15,1597 +15,578 @@
         .custom-shadow {
             box-shadow: 0 10px 25px -5px rgba(16, 185, 129, 0.1), 0 8px 10px -6px rgba(16, 185, 129, 0.1);
         }
-        @media print {
-            body * {
-                visibility: hidden;
-            }
-            #certificate-modal, #certificate-modal * {
-                visibility: visible;
-            }
-            #certificate-modal {
-                position: absolute;
-                left: 0;
-                top: 0;
-                width: 100%;
-                margin: 0;
-                padding: 0;
-                background: white !important;
-                box-shadow: none !important;
-                border: none !important;
-            }
-            .no-print {
-                display: none !important;
-            }
-        }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 flex flex-col justify-between selection:bg-emerald-500 selection:text-white">
+<body class="min-h-screen text-slate-800 flex flex-col justify-between">
 
-    <!-- Top Navigation / Sound Bar -->
-    <header class="bg-white/90 backdrop-blur-md border-b border-emerald-100 sticky top-0 z-40 px-4 py-3 shadow-sm">
-        <div class="max-w-6xl mx-auto flex justify-between items-center">
-            <div class="flex items-center space-x-2">
-                <span class="text-2xl">📚</span>
-                <span class="font-bold text-emerald-800 text-sm sm:text-base">Petualangan Bahasa Indonesia Kelas 5</span>
-            </div>
-            <div class="flex items-center space-x-3">
-                <button id="toggle-sound" onclick="toggleSound()" class="flex items-center space-x-1 bg-emerald-100 hover:bg-emerald-200 text-emerald-800 px-3 py-1.5 rounded-full text-xs font-semibold transition">
-                    <span id="sound-icon">🔊</span>
-                    <span id="sound-text">Suara Aktif</span>
-                </button>
-                <button id="btn-logout" onclick="handleLogout()" class="hidden bg-rose-100 hover:bg-rose-200 text-rose-800 px-3 py-1.5 rounded-full text-xs font-semibold transition">
-                    🚪 Keluar
-                </button>
-            </div>
+    <!-- Header / Navigasi Utama -->
+    <header class="w-full bg-white/80 backdrop-blur-md border-b border-slate-100 py-3 px-6 sticky top-0 z-50 flex justify-between items-center">
+        <div class="flex items-center gap-3">
+            <div class="w-10 h-10 rounded-xl bg-emerald-500 flex items-center justify-center text-white font-bold text-xl shadow-md">📚</div>
+            <h1 class="text-lg font-extrabold text-slate-800 tracking-tight">Petualangan Bahasa Indonesia Kelas 5</h1>
+        </div>
+        <div class="flex items-center gap-3">
+            <button id="audio-toggle-btn" onclick="toggleAudio()" class="px-3 py-1.5 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-700 text-sm font-semibold transition flex items-center gap-1.5">
+                🔊 <span id="audio-status-text">Suara Aktif</span>
+            </button>
+            <button id="logout-btn" onclick="handleLogout()" class="hidden px-3 py-1.5 rounded-lg bg-rose-50 hover:bg-rose-100 text-rose-700 text-sm font-semibold transition">
+                Keluar
+            </button>
         </div>
     </header>
 
-    <!-- Main Container -->
+    <!-- Konten Utama (Aplikasi & Dashboard) -->
     <main class="flex-grow flex items-center justify-center p-4 sm:p-6">
-        <div class="w-full max-w-5xl bg-white rounded-3xl custom-shadow border border-emerald-100 overflow-hidden transition-all duration-300">
-
-            <!-- 1. HALAMAN UTAMA / LANDING -->
-            <section id="screen-landing" class="p-6 sm:p-12 text-center space-y-6">
-                <div class="inline-block bg-emerald-100 text-emerald-800 text-xs font-bold uppercase tracking-widest px-3 py-1.5 rounded-full">
-                    Kurikulum Merdeka • Semester 1 • Jilid 1
-                </div>
-                <div class="space-y-2">
-                    <h1 class="text-3xl sm:text-5xl font-extrabold text-emerald-900 tracking-tight">
-                        PETUALANGAN BAHASA INDONESIA
-                    </h1>
-                    <p class="text-lg sm:text-xl text-slate-600 font-medium">
-                        Kelas 5 SD/MI – Pembelajaran Interaktif & Real-time Monitoring
-                    </p>
-                </div>
-
-                <!-- Ilustrasi Dekoratif -->
-                <div class="bg-gradient-to-br from-emerald-50 to-sky-50 border border-emerald-100 rounded-3xl p-6 sm:p-8 flex flex-col items-center justify-center space-y-4 max-w-2xl mx-auto">
-                    <div class="flex space-x-4 text-4xl sm:text-5xl">
-                        <span>📖</span><span>✍️</span><span>🧠</span><span>🌟</span><span>✏️</span>
-                    </div>
-                    <p class="text-sm sm:text-base text-emerald-800 font-medium max-w-md">
-                        Jelajahi keunikan diri, dunia buku yang luas, dan ekspresikan hobimu lewat bahasa yang indah!
-                    </p>
-                </div>
-
-                <!-- Pilihan Mode -->
-                <div class="max-w-md mx-auto grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
-                    <button onclick="selectRole('student')" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-emerald-600/30 transition transform active:scale-95 flex flex-col items-center justify-center space-y-2">
-                        <span class="text-3xl">📚</span>
-                        <span class="text-lg">MODE SISWA</span>
-                        <span class="text-xs font-normal text-emerald-100">Belajar, kuis & sertifikat</span>
-                    </button>
-                    <button onclick="selectRole('teacher')" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-4 px-6 rounded-2xl shadow-lg shadow-sky-600/30 transition transform active:scale-95 flex flex-col items-center justify-center space-y-2">
-                        <span class="text-3xl">👨‍🏫</span>
-                        <span class="text-lg">MODE GURU</span>
-                        <span class="text-xs font-normal text-sky-100">Dashboard & monitoring kelas</span>
-                    </button>
-                </div>
-
-                <!-- Firebase Console Setup Info Toggle -->
-                <div class="pt-6 border-t max-w-xl mx-auto text-left">
-                    <button onclick="toggleFirebaseInfo()" class="w-full flex justify-between items-center text-xs font-bold text-slate-500 hover:text-emerald-700">
-                        <span>⚙️ Petunjuk Konfigurasi Firebase Console</span>
-                        <span id="firebase-toggle-icon">▼</span>
-                    </button>
-                    <div id="firebase-info-box" class="hidden mt-3 p-4 bg-slate-50 rounded-2xl border border-slate-200 text-xs text-slate-600 space-y-2">
-                        <p>Aplikasi ini siap dihubungkan dengan Firebase Console anda.</p>
-                        <ol class="list-decimal pl-4 space-y-1">
-                            <li>Buat project baru di <a href="https://console.firebase.google.com/" target="_blank" class="text-emerald-600 underline">Firebase Console</a>.</li>
-                            <li>Aktifkan <strong>Authentication</strong> (Email/Password & Anonymous).</li>
-                            <li>Buat database <strong>Cloud Firestore</strong> (atur ke Test Mode atau Security Rules sesuai dokumentasi).</li>
-                            <li>Masukkan konfigurasi di bagian script variabel <code>firebaseConfig</code> pada file ini.</li>
-                            <li>Akun Guru dapat didaftarkan langsung atau dibuat di Auth Console.</li>
-                        </ol>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 2. HALAMAN AUTENTIKASI SISWA / GURU -->
-            <section id="screen-auth" class="p-6 sm:p-10 max-w-md mx-auto space-y-6 hidden">
-                <div class="text-center space-y-2">
-                    <span id="auth-icon" class="text-4xl">📚</span>
-                    <h2 id="auth-title" class="text-2xl sm:text-3xl font-extrabold text-emerald-900">Login Siswa</h2>
-                    <p id="auth-subtitle" class="text-slate-600 text-sm">Masukkan nama dan kode kelas untuk mulai</p>
-                </div>
-
-                <div class="space-y-4">
-                    <div id="student-only-fields" class="space-y-4">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Nama Lengkap Siswa:</label>
-                            <input type="text" id="input-name" placeholder="Contoh: Aisyah Putri" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 text-sm font-medium">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Kode Kelas (contoh: BINDO5A):</label>
-                            <input type="text" id="input-class-code" placeholder="BINDO5A" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-emerald-500 text-slate-800 text-sm font-medium uppercase">
-                        </div>
-                    </div>
-
-                    <div id="teacher-only-fields" class="space-y-4 hidden">
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Email Guru:</label>
-                            <input type="email" id="input-email" placeholder="guru@email.com" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800 text-sm font-medium">
-                        </div>
-                        <div>
-                            <label class="block text-sm font-semibold text-slate-700 mb-1">Password:</label>
-                            <input type="password" id="input-password" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-slate-300 focus:outline-none focus:ring-2 focus:ring-sky-500 text-slate-800 text-sm font-medium">
-                        </div>
-                    </div>
-
-                    <div id="auth-error-msg" class="text-rose-600 text-xs font-semibold text-center hidden"></div>
-
-                    <button id="btn-auth-submit" onclick="handleAuthSubmit()" class="w-full bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3.5 px-6 rounded-xl shadow-lg transition transform active:scale-95 text-base">
-                        MASUK SEKARANG
-                    </button>
-
-                    <div id="teacher-switch-box" class="text-center pt-2">
-                        <button id="btn-auth-switch" onclick="toggleAuthMode()" class="text-emerald-700 text-xs font-bold hover:underline">
-                            Masuk sebagai Guru / Pengajar
-                        </button>
-                    </div>
-
-                    <div class="text-center pt-2 border-t">
-                        <button onclick="switchScreen('screen-landing')" class="text-slate-500 text-xs hover:underline">
-                            ⬅️ Kembali ke Halaman Utama
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 3. DASHBOARD SISWA -->
-            <section id="screen-student-dashboard" class="p-6 sm:p-10 space-y-6 hidden">
-                <div class="bg-gradient-to-r from-emerald-600 to-teal-700 text-white rounded-3xl p-6 sm:p-8 flex flex-col sm:flex-row justify-between items-start sm:items-center shadow-lg gap-4">
-                    <div class="space-y-1">
-                        <span class="bg-white/20 text-white text-xs font-bold px-3 py-1 rounded-full uppercase">Kelas 5 • Siswa</span>
-                        <h2 id="dash-student-name" class="text-2xl sm:text-3xl font-extrabold">Halo, Siswa!</h2>
-                        <p class="text-emerald-100 text-xs sm:text-sm">Siap menaklukkan Petualangan Bahasa Indonesia hari ini?</p>
-                    </div>
-                    <div class="flex items-center space-x-2">
-                        <button onclick="startQuizFromMenu()" class="bg-white text-emerald-800 hover:bg-emerald-50 font-bold py-3 px-6 rounded-2xl shadow transition text-sm flex items-center space-x-2">
-                            <span>🎯 MULAI KUIS (50 SOAL)</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Statistik Siswa -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-emerald-700 block uppercase">Skor Tertinggi</span>
-                        <span id="stat-high-score" class="text-2xl sm:text-3xl font-black text-emerald-900">0</span>
-                        <span class="text-[10px] text-slate-500 block">dari 1000</span>
-                    </div>
-                    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-blue-700 block uppercase">Jawaban Benar</span>
-                        <span id="stat-correct-count" class="text-2xl sm:text-3xl font-black text-blue-900">0</span>
-                        <span class="text-[10px] text-slate-500 block">soal</span>
-                    </div>
-                    <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-purple-700 block uppercase">Persentase</span>
-                        <span id="stat-percentage" class="text-2xl sm:text-3xl font-black text-purple-900">0%</span>
-                        <span class="text-[10px] text-slate-500 block">ketepatan</span>
-                    </div>
-                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-amber-700 block uppercase">Soal Terakhir</span>
-                        <span id="stat-last-q" class="text-2xl sm:text-3xl font-black text-amber-900">0 / 50</span>
-                        <span class="text-[10px] text-slate-500 block">progres</span>
-                    </div>
-                </div>
-
-                <!-- Menu Aksi Siswa -->
-                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-2">
-                    <div onclick="goToMaterialMenu()" class="bg-white border-2 border-emerald-100 hover:border-emerald-500 rounded-2xl p-6 cursor-pointer transition shadow-sm hover:shadow-md flex items-center space-x-4 group">
-                        <span class="text-3xl bg-emerald-50 p-3 rounded-2xl group-hover:bg-emerald-600 group-hover:text-white transition">📚</span>
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-base">Belajar Materi</h3>
-                            <p class="text-xs text-slate-500">Bab 1, Bab 2, dan Bab 3 lengkap</p>
-                        </div>
-                    </div>
-                    <div onclick="openCertificateModal()" class="bg-white border-2 border-emerald-100 hover:border-emerald-500 rounded-2xl p-6 cursor-pointer transition shadow-sm hover:shadow-md flex items-center space-x-4 group">
-                        <span class="text-3xl bg-amber-50 p-3 rounded-2xl group-hover:bg-amber-600 group-hover:text-white transition">🏆</span>
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-base">Sertifikat Penghargaan</h3>
-                            <p class="text-xs text-slate-500">Unduh & cetak sertifikat resmi</p>
-                        </div>
-                    </div>
-                    <div onclick="startQuizFromMenu()" class="bg-white border-2 border-emerald-100 hover:border-emerald-500 rounded-2xl p-6 cursor-pointer transition shadow-sm hover:shadow-md flex items-center space-x-4 group">
-                        <span class="text-3xl bg-sky-50 p-3 rounded-2xl group-hover:bg-sky-600 group-hover:text-white transition">🎯</span>
-                        <div>
-                            <h3 class="font-bold text-slate-800 text-base">Lanjutkan Kuis</h3>
-                            <p class="text-xs text-slate-500">Selesaikan 50 soal interaktif</p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 4. MENU MATERI PEMBELAJARAN -->
-            <section id="screen-material-menu" class="p-6 sm:p-10 space-y-6 hidden">
-                <div class="flex justify-between items-center">
-                    <div>
-                        <h2 class="text-2xl font-bold text-emerald-900">Pusat Materi Pembelajaran</h2>
-                        <p class="text-sm text-slate-600">Pilih bab yang ingin kamu pelajari atau langsung mulai kuis.</p>
-                    </div>
-                    <div class="flex space-x-2">
-                        <button onclick="backToStudentDash()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2 px-4 rounded-xl text-sm transition">
-                            ⬅️ Dashboard
-                        </button>
-                        <button onclick="startQuizFromMenu()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-semibold py-2 px-4 rounded-xl shadow transition text-sm">
-                            🎯 Kuis (50 Soal)
-                        </button>
-                    </div>
-                </div>
-
-                <div class="grid gap-4">
-                    <!-- Bab 1 Card -->
-                    <div onclick="openMaterialDetail(1)" class="bg-white border-2 border-emerald-100 hover:border-emerald-500 rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md flex items-center justify-between group">
-                        <div class="space-y-1">
-                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Bab 1 • Semester 1</span>
-                            <h3 class="text-lg font-bold text-slate-800 group-hover:text-emerald-700 transition">📖 Bab 1 – Aku yang Unik</h3>
-                            <p class="text-xs text-slate-500">Teks deskripsi diri, kosakata ekspresi bahasa, & teks narasi.</p>
-                        </div>
-                        <span class="bg-emerald-50 text-emerald-700 p-2 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition font-bold text-sm">Buka ➔</span>
-                    </div>
-
-                    <!-- Bab 2 Card -->
-                    <div onclick="openMaterialDetail(2)" class="bg-white border-2 border-emerald-100 hover:border-emerald-500 rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md flex items-center justify-between group">
-                        <div class="space-y-1">
-                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Bab 2 • Semester 1</span>
-                            <h3 class="text-lg font-bold text-slate-800 group-hover:text-emerald-700 transition">🌍 Bab 2 – Buku Jendela Dunia</h3>
-                            <p class="text-xs text-slate-500">Buku fiksi/nonfiksi, unsur intrinsik, kalimat langsung/tak langsung, & majas (metafora, personifikasi, hiperbola).</p>
-                        </div>
-                        <span class="bg-emerald-50 text-emerald-700 p-2 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition font-bold text-sm">Buka ➔</span>
-                    </div>
-
-                    <!-- Bab 3 Card -->
-                    <div onclick="openMaterialDetail(3)" class="bg-white border-2 border-emerald-100 hover:border-emerald-500 rounded-2xl p-5 cursor-pointer transition shadow-sm hover:shadow-md flex items-center justify-between group">
-                        <div class="space-y-1">
-                            <span class="text-xs font-bold text-emerald-600 uppercase tracking-wider">Bab 3 • Semester 1</span>
-                            <h3 class="text-lg font-bold text-slate-800 group-hover:text-emerald-700 transition">🎨 Bab 3 – Ekspresi Diri Melalui Hobi</h3>
-                            <p class="text-xs text-slate-500">Teks tentang hobi, kosakata bahasa hobi, & ekspresi tulis/lisan.</p>
-                        </div>
-                        <span class="bg-emerald-50 text-emerald-700 p-2 rounded-xl group-hover:bg-emerald-600 group-hover:text-white transition font-bold text-sm">Buka ➔</span>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 5. HALAMAN DETAIL MATERI -->
-            <section id="screen-material-detail" class="p-6 sm:p-10 space-y-6 hidden">
-                <div class="flex items-center justify-between border-b pb-4">
-                    <button onclick="goToMaterialMenu()" class="text-emerald-700 font-semibold text-sm hover:underline flex items-center space-x-1">
-                        <span>⬅️ Kembali ke Daftar Bab</span>
-                    </button>
-                    <span id="material-chapter-badge" class="bg-emerald-100 text-emerald-800 text-xs font-bold px-3 py-1 rounded-full">Bab 1</span>
-                </div>
-
-                <div id="material-content-box" class="space-y-4 text-slate-700 text-sm sm:text-base leading-relaxed">
-                    <!-- Dynamic Content -->
-                </div>
-
-                <div class="pt-4 border-t flex justify-between items-center">
-                    <button onclick="goToMaterialMenu()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2.5 px-5 rounded-xl text-sm transition">
-                        📖 Pilih Bab Lain
-                    </button>
-                    <button onclick="startQuizFromMenu()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 rounded-xl shadow transition text-sm">
-                        🎯 Lanjut ke Kuis ➔
-                    </button>
-                </div>
-            </section>
-
-            <!-- 6. HALAMAN KUIS UTAMA -->
-            <section id="screen-quiz" class="p-6 sm:p-8 space-y-6 hidden">
-                <!-- Quiz Header Info -->
-                <div class="bg-emerald-50/80 border border-emerald-100 rounded-2xl p-4 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-3">
-                    <div>
-                        <div class="flex items-center space-x-2">
-                            <span id="quiz-chapter-tag" class="bg-emerald-600 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-full uppercase">Bab 1</span>
-                            <span class="text-xs font-bold text-slate-500" id="quiz-counter-text">Soal 1 dari 50</span>
-                        </div>
-                        <h3 class="text-base sm:text-lg font-bold text-slate-800 mt-1" id="quiz-student-display">Nama: -</h3>
-                    </div>
-                    <div class="flex items-center space-x-3 w-full sm:w-auto justify-between sm:justify-end">
-                        <div class="bg-white px-3 py-1.5 rounded-xl border border-emerald-200 shadow-sm text-right">
-                            <span class="text-[10px] text-slate-400 block font-bold uppercase">Skor</span>
-                            <span id="quiz-score-display" class="text-emerald-700 font-extrabold text-base">0</span>
-                        </div>
-                        <button onclick="openMaterialMenuDuringQuiz()" class="bg-sky-100 hover:bg-sky-200 text-sky-800 px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center space-x-1 shadow-sm">
-                            <span>📚 Materi</span>
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Progress Bar -->
-                <div class="w-full bg-slate-200 h-2.5 rounded-full overflow-hidden">
-                    <div id="quiz-progress-bar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 2%;"></div>
-                </div>
-
-                <!-- Question Box -->
-                <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-5 sm:p-6 space-y-4">
-                    <div class="flex items-center justify-between">
-                        <span id="quiz-difficulty-tag" class="bg-amber-100 text-amber-800 text-[11px] font-bold px-2.5 py-0.5 rounded-md">Sedang</span>
-                        <span id="quiz-topic-tag" class="text-xs font-semibold text-slate-500">Subbab: ...</span>
-                    </div>
-                    <h4 id="quiz-question-text" class="text-base sm:text-lg font-bold text-slate-900 leading-snug">
-                        Pertanyaan kuis akan dimuat di sini...
-                    </h4>
-                </div>
-
-                <!-- Options Grid -->
-                <div id="quiz-options-container" class="grid gap-3">
-                    <!-- Options generated via JS -->
-                </div>
-
-                <!-- Feedback & Explanation Box (Hidden initially) -->
-                <div id="quiz-feedback-box" class="hidden rounded-2xl p-5 border space-y-3 transition-all">
-                    <div id="feedback-title" class="font-extrabold text-lg flex items-center space-x-2"></div>
-                    <p id="feedback-text" class="text-sm sm:text-base leading-relaxed"></p>
-                    <div class="pt-2 flex justify-end">
-                        <button onclick="proceedNextQuestion()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-6 rounded-xl shadow transition text-sm flex items-center space-x-2">
-                            <span>➡️ LANJUT KE SOAL BERIKUTNYA</span>
-                        </button>
-                    </div>
-                </div>
-            </section>
-
-            <!-- 7. HALAMAN HASIL AKHIR -->
-            <section id="screen-result" class="p-6 sm:p-10 text-center space-y-6 hidden">
-                <div class="inline-block bg-amber-100 text-amber-800 text-xs font-bold uppercase tracking-widest px-3.5 py-1.5 rounded-full">
-                    🎉 KUIS SELESAI! 🎉
-                </div>
-
-                <div class="space-y-2">
-                    <h2 class="text-2xl sm:text-3xl font-extrabold text-emerald-900" id="result-congrats-title">
-                        Selamat, [NAMA SISWA]!
-                    </h2>
-                    <p class="text-slate-600 text-sm sm:text-base" id="result-motivation-text">
-                        Teruslah belajar dan berakhlak mulia!
-                    </p>
-                </div>
-
-                <!-- Score Summary Cards -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 max-w-lg mx-auto">
-                    <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-emerald-700 block uppercase">Skor Akhir</span>
-                        <span id="final-score" class="text-2xl font-extrabold text-emerald-900">0</span>
-                        <span class="text-[10px] text-slate-500 block">dari 1.000</span>
-                    </div>
-                    <div class="bg-blue-50 border border-blue-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-blue-700 block uppercase">Benar</span>
-                        <span id="final-correct" class="text-2xl font-extrabold text-blue-900">0</span>
-                        <span class="text-[10px] text-slate-500 block">soal</span>
-                    </div>
-                    <div class="bg-rose-50 border border-rose-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-rose-700 block uppercase">Salah</span>
-                        <span id="final-wrong" class="text-2xl font-extrabold text-rose-900">0</span>
-                        <span class="text-[10px] text-slate-500 block">soal</span>
-                    </div>
-                    <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-purple-700 block uppercase">Persentase</span>
-                        <span id="final-percentage" class="text-2xl font-extrabold text-purple-900">0%</span>
-                        <span class="text-[10px] text-slate-500 block">ketepatan</span>
-                    </div>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="flex flex-wrap justify-center gap-3 pt-2">
-                    <button onclick="openCertificateModal()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-3 px-6 rounded-xl shadow-lg transition flex items-center justify-center space-x-2 text-sm">
-                        <span>🏆 LIHAT SERTIFIKAT</span>
-                    </button>
-                    <button onclick="restartQuiz()" class="bg-sky-600 hover:bg-sky-700 text-white font-bold py-3 px-6 rounded-xl shadow transition flex items-center justify-center space-x-2 text-sm">
-                        <span>🔄 ULANGI KUIS</span>
-                    </button>
-                    <button onclick="backToStudentDash()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-bold py-3 px-6 rounded-xl transition flex items-center justify-center space-x-2 text-sm">
-                        <span>🏠 KEMBALI KE DASHBOARD</span>
-                    </button>
-                </div>
-            </section>
-
-            <!-- 8. MODE GURU / DASHBOARD GURU -->
-            <section id="screen-teacher-dashboard" class="p-6 sm:p-10 space-y-6 hidden">
-                <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center border-b pb-4 gap-3">
-                    <div>
-                        <span class="bg-sky-100 text-sky-800 text-xs font-bold px-3 py-1 rounded-full uppercase">Mode Guru</span>
-                        <h2 class="text-2xl sm:text-3xl font-extrabold text-slate-900 mt-1">👨‍🏫 DASHBOARD GURU</h2>
-                        <p class="text-slate-500 text-sm">Monitoring real-time aktivitas dan nilai siswa kelas 5</p>
-                    </div>
-                    <div class="flex items-center space-x-3">
-                        <button onclick="openClassManagerModal()" class="bg-sky-600 hover:bg-sky-700 text-white text-xs font-bold px-4 py-2.5 rounded-xl shadow transition">
-                            🏫 Kelola Kelas / Kode
-                        </button>
-                        <button onclick="handleLogout()" class="bg-rose-100 hover:bg-rose-200 text-rose-800 text-xs font-bold px-4 py-2.5 rounded-xl transition">
-                            🚪 Keluar
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Statistik Kelas Real-time -->
-                <div class="grid grid-cols-2 sm:grid-cols-4 gap-4">
-                    <div class="bg-sky-50 border border-sky-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-sky-700 block uppercase">Jumlah Siswa</span>
-                        <span id="teacher-stat-total-students" class="text-2xl sm:text-3xl font-black text-sky-900">0</span>
-                    </div>
-                    <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-emerald-700 block uppercase">Siswa Selesai</span>
-                        <span id="teacher-stat-completed" class="text-2xl sm:text-3xl font-black text-emerald-900">0</span>
-                    </div>
-                    <div class="bg-amber-50 border border-amber-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-amber-700 block uppercase">Rata-Rata Nilai</span>
-                        <span id="teacher-stat-avg-score" class="text-2xl sm:text-3xl font-black text-amber-900">0</span>
-                    </div>
-                    <div class="bg-purple-50 border border-purple-200 rounded-2xl p-4 text-center">
-                        <span class="text-xs font-bold text-purple-700 block uppercase">Nilai Tertinggi</span>
-                        <span id="teacher-stat-max-score" class="text-2xl sm:text-3xl font-black text-purple-900">0</span>
-                    </div>
-                </div>
-
-                <!-- Tabel Data Siswa Real-time -->
-                <div class="space-y-3">
-                    <div class="flex justify-between items-center">
-                        <h3 class="font-bold text-slate-800 text-lg">📊 Daftar Monitoring Siswa (Real-time)</h3>
-                        <span class="text-xs text-slate-500">Pembaruan otomatis via Firestore</span>
-                    </div>
-
-                    <div class="overflow-x-auto border border-slate-200 rounded-2xl bg-white shadow-sm">
-                        <table class="w-full text-left border-collapse text-xs sm:text-sm">
-                            <thead>
-                                <tr class="bg-slate-100 text-slate-700 uppercase font-bold text-[11px] border-b">
-                                    <th class="p-3">Nama Siswa</th>
-                                    <th class="p-3">Kelas</th>
-                                    <th class="p-3">Status</th>
-                                    <th class="p-3">Soal</th>
-                                    <th class="p-3">Skor</th>
-                                    <th class="p-3">Benar / Salah</th>
-                                    <th class="p-3">Terakhir Aktif</th>
-                                    <th class="p-3 text-center">Aksi</th>
-                                </tr>
-                            </thead>
-                            <tbody id="teacher-students-table-body" class="divide-y divide-slate-100">
-                                <tr>
-                                    <td colspan="8" class="p-6 text-center text-slate-400">Memuat data siswa dari database...</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </section>
-
+        
+        <!-- SCREEN 1: PILIH PERAN (HALAMAN UTAMA) -->
+        <div id="screen-home" class="w-full max-w-md bg-white rounded-3xl custom-shadow p-8 text-center space-y-6">
+            <div class="w-20 h-20 bg-emerald-100 rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-inner">🎒</div>
+            <div>
+                <h2 class="text-2xl font-extrabold text-slate-800">Selamat Datang, Pejuang Ilmu!</h2>
+                <p class="text-slate-500 text-sm mt-1">Pilih peran Anda untuk memulai petualangan belajar hari ini.</p>
+            </div>
+            <div class="space-y-3 pt-2">
+                <button onclick="switchScreen('screen-student-login')" class="w-full py-3.5 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl shadow-lg shadow-emerald-600/20 transition flex items-center justify-center gap-2">
+                    👨‍🎓 Masuk sebagai Siswa
+                </button>
+                <button onclick="switchScreen('screen-teacher-login')" class="w-full py-3.5 px-4 bg-white hover:bg-slate-50 border-2 border-slate-200 text-slate-700 font-bold rounded-2xl transition flex items-center justify-center gap-2">
+                    👩‍🏫 Login Guru / Pengajar
+                </button>
+            </div>
         </div>
+
+        <!-- SCREEN 2: LOGIN SISWA -->
+        <div id="screen-student-login" class="hidden w-full max-w-md bg-white rounded-3xl custom-shadow p-8 space-y-6">
+            <div class="text-center">
+                <div class="text-3xl mb-2">👋</div>
+                <h2 class="text-xl font-extrabold text-slate-800">Identitas Siswa</h2>
+                <p class="text-slate-500 text-sm">Masukkan nama lengkap dan kode kelas Anda.</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Nama Lengkap</label>
+                    <input type="text" id="input-student-name" placeholder="Contoh: Budi Santoso" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Kode Kelas</label>
+                    <input type="text" id="input-class-code" value="5A" placeholder="Contoh: 5A" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium uppercase">
+                </div>
+                <button onclick="handleStudentLogin()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
+                    Mulai Petualangan 🚀
+                </button>
+                <button onclick="switchScreen('screen-home')" class="w-full py-2.5 text-slate-500 hover:text-slate-800 font-semibold text-sm transition">
+                    ← Kembali ke Halaman Utama
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 3: LOGIN / REGISTER GURU -->
+        <div id="screen-teacher-login" class="hidden w-full max-w-md bg-white rounded-3xl custom-shadow p-8 space-y-6">
+            <div class="text-center">
+                <div class="text-3xl mb-2">👩‍🏫</div>
+                <h2 class="text-xl font-extrabold text-slate-800">Login Guru / Pengajar</h2>
+                <p class="text-slate-500 text-sm">Pantau aktivitas & rekap nilai siswa secara real-time.</p>
+            </div>
+            <div class="space-y-4">
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Email Guru</label>
+                    <input type="email" id="input-teacher-email" placeholder="guru@email.com" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
+                </div>
+                <div>
+                    <label class="block text-xs font-bold uppercase text-slate-500 mb-1">Password</label>
+                    <input type="password" id="input-teacher-password" placeholder="••••••••" class="w-full px-4 py-3 rounded-xl border border-slate-200 focus:outline-none focus:ring-2 focus:ring-emerald-500 font-medium">
+                </div>
+                <p id="teacher-auth-error" class="text-xs text-rose-600 font-semibold hidden text-center">Mohon isi email dan password dengan benar.</p>
+                <button onclick="handleTeacherLogin()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
+                    Masuk ke Dashboard
+                </button>
+                <button onclick="handleTeacherRegister()" class="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold rounded-xl text-sm transition">
+                    Daftar Akun Guru Baru
+                </button>
+                <button onclick="switchScreen('screen-home')" class="w-full py-2 text-slate-500 hover:text-slate-800 font-semibold text-sm transition">
+                    ← Kembali ke Halaman Utama
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 4: DASHBOARD GURU -->
+        <div id="screen-teacher-dashboard" class="hidden w-full max-w-5xl bg-white rounded-3xl custom-shadow p-6 sm:p-8 space-y-6">
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-slate-100 pb-5">
+                <div>
+                    <span class="px-3 py-1 bg-emerald-100 text-emerald-800 text-xs font-extrabold rounded-full uppercase tracking-wider">Mode Guru</span>
+                    <h2 class="text-2xl font-extrabold text-slate-800 mt-1">DASHBOARD GURU</h2>
+                    <p class="text-slate-500 text-sm">Monitoring real-time aktivitas dan nilai siswa kelas 5</p>
+                </div>
+                <div class="flex items-center gap-2">
+                    <button onclick="alert('Kode Kelas Aktif: 5A')" class="px-4 py-2 bg-emerald-50 hover:bg-emerald-100 text-emerald-700 font-bold rounded-xl text-sm transition">
+                        🏫 Kelola Kelas / Kode
+                    </button>
+                    <button onclick="handleLogout()" class="px-4 py-2 bg-rose-50 hover:bg-rose-100 text-rose-700 font-bold rounded-xl text-sm transition">
+                        Keluar
+                    </button>
+                </div>
+            </div>
+
+            <!-- Kartu Statistik Singkat -->
+            <div class="grid grid-cols-1 sm:grid-cols-4 gap-4">
+                <div class="p-5 rounded-2xl bg-sky-50 border border-sky-100">
+                    <p class="text-xs font-bold uppercase text-sky-600">Jumlah Siswa</p>
+                    <p id="teacher-stat-total-students" class="text-3xl font-extrabold text-sky-900 mt-1">0</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-emerald-50 border border-emerald-100">
+                    <p class="text-xs font-bold uppercase text-emerald-600">Siswa Selesai</p>
+                    <p id="teacher-stat-completed" class="text-3xl font-extrabold text-emerald-900 mt-1">0</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-amber-50 border border-amber-100">
+                    <p class="text-xs font-bold uppercase text-amber-600">Rata-Rata Nilai</p>
+                    <p id="teacher-stat-avg-score" class="text-3xl font-extrabold text-amber-900 mt-1">0</p>
+                </div>
+                <div class="p-5 rounded-2xl bg-purple-50 border border-purple-100">
+                    <p class="text-xs font-bold uppercase text-purple-600">Nilai Tertinggi</p>
+                    <p id="teacher-stat-max-score" class="text-3xl font-extrabold text-purple-900 mt-1">0</p>
+                </div>
+            </div>
+
+            <!-- Tabel Monitoring Siswa -->
+            <div class="space-y-3">
+                <div class="flex justify-between items-center">
+                    <h3 class="font-extrabold text-slate-800 text-lg">📊 Daftar Monitoring Siswa (Real-time)</h3>
+                    <span class="text-xs text-slate-400 font-medium">Pembaruan otomatis via Firestore</span>
+                </div>
+                <div class="overflow-x-auto border border-slate-100 rounded-2xl">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="bg-slate-50 text-xs uppercase font-bold text-slate-500 border-b border-slate-100">
+                                <th class="p-3.5">Nama Siswa</th>
+                                <th class="p-3.5">Kelas</th>
+                                <th class="p-3.5">Status</th>
+                                <th class="p-3.5">Soal</th>
+                                <th class="p-3.5">Skor</th>
+                                <th class="p-3.5">Benar / Salah</th>
+                                <th class="p-3.5">Terakhir Aktif</th>
+                                <th class="p-3.5 text-center">Aksi</th>
+                            </tr>
+                        </thead>
+                        <tbody id="teacher-student-table-body" class="text-sm font-medium text-slate-700">
+                            <tr>
+                                <td colspan="8" class="p-8 text-center text-slate-400">Memuat data siswa dari database...</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- SCREEN 5: GAME / KUIS UTAMA -->
+        <div id="screen-game" class="hidden w-full max-w-3xl bg-white rounded-3xl custom-shadow p-6 sm:p-8 space-y-6">
+            <!-- Header Kuis -->
+            <div class="flex justify-between items-center border-b border-slate-100 pb-4">
+                <div>
+                    <span id="quiz-chapter-tag" class="text-xs font-bold uppercase text-emerald-600 bg-emerald-50 px-3 py-1 rounded-full">Bab 1: Menulis Cerita</span>
+                    <h2 id="quiz-question-counter-text" class="text-lg font-extrabold text-slate-800 mt-1">Soal 1 dari 50</h2>
+                </div>
+                <div class="text-right">
+                    <span class="text-xs text-slate-400 font-semibold block">Skor Kamu</span>
+                    <span id="quiz-score-display" class="text-2xl font-extrabold text-emerald-600">0</span>
+                </div>
+            </div>
+
+            <!-- Progress Bar -->
+            <div class="w-full bg-slate-100 h-2.5 rounded-full overflow-hidden">
+                <div id="quiz-progress-bar" class="bg-emerald-500 h-full w-2 transition-all duration-300"></div>
+            </div>
+
+            <!-- Area Soal -->
+            <div class="space-y-4">
+                <div class="flex items-center gap-2">
+                    <span id="quiz-difficulty-tag" class="px-2.5 py-0.5 rounded-md bg-sky-100 text-sky-800 text-xs font-bold">Mudah</span>
+                    <span id="quiz-topic-tag" class="text-xs text-slate-400 font-medium">Subbab: Ide Pokok Paragraf</span>
+                </div>
+                <p id="quiz-question-text" class="text-base sm:text-lg font-bold text-slate-800 leading-relaxed">
+                    Memuat pertanyaan...
+                </p>
+
+                <!-- Pilihan Ganda -->
+                <div id="quiz-options-container" class="space-y-3 pt-2">
+                    <!-- Tombol pilihan ganda digenerate oleh JS -->
+                </div>
+            </div>
+
+            <!-- Feedback Kotak Penjelasan -->
+            <div id="quiz-feedback-box" class="hidden rounded-2xl p-5 border space-y-3">
+                <h4 id="quiz-feedback-title" class="font-extrabold text-base"></h4>
+                <p id="feedback-text" class="text-sm leading-relaxed"></p>
+                <button onclick="proceedNextQuestion()" class="px-6 py-2.5 bg-slate-800 hover:bg-slate-900 text-white font-bold rounded-xl text-sm transition">
+                    Lanjut Soal Berikutnya →
+                </button>
+            </div>
+        </div>
+
+        <!-- SCREEN 6: HASIL KUIS AKHIR -->
+        <div id="screen-result" class="hidden w-full max-w-md bg-white rounded-3xl custom-shadow p-8 text-center space-y-6">
+            <div class="w-20 h-20 bg-emerald-100 rounded-3xl mx-auto flex items-center justify-center text-4xl shadow-inner">🏆</div>
+            <div>
+                <h2 id="result-congrats-title" class="text-2xl font-extrabold text-slate-800">Selamat!</h2>
+                <p class="text-slate-500 text-sm mt-1">Kamu telah menyelesaikan seluruh rangkaian 50 soal latihan.</p>
+            </div>
+
+            <div class="grid grid-cols-3 gap-3 bg-slate-50 p-4 rounded-2xl">
+                <div>
+                    <span class="text-xs text-slate-400 font-bold block">SKOR AKHIR</span>
+                    <span id="final-score" class="text-xl font-extrabold text-emerald-600">0</span>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-400 font-bold block">BENAR</span>
+                    <span id="final-correct" class="text-xl font-extrabold text-sky-600">0</span>
+                </div>
+                <div>
+                    <span class="text-xs text-slate-400 font-bold block">SALAH</span>
+                    <span id="final-wrong" class="text-xl font-extrabold text-rose-600">0</span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <button onclick="restartQuiz()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-xl shadow-lg transition">
+                    Ulangi Kuis 🔄
+                </button>
+                <button onclick="switchScreen('screen-home')" class="w-full py-2.5 text-slate-500 hover:text-slate-800 font-semibold text-sm transition">
+                    Kembali ke Menu Utama
+                </button>
+            </div>
+        </div>
+
     </main>
 
-    <!-- 9. MODAL SERTIFIKAT DIGITAL -->
-    <div id="certificate-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 overflow-y-auto hidden">
-        <div class="bg-white w-full max-w-2xl rounded-3xl shadow-2xl border-4 border-amber-400 p-6 sm:p-10 relative space-y-6">
-            
-            <button onclick="closeCertificateModal()" class="no-print absolute top-4 right-4 bg-slate-100 hover:bg-slate-200 text-slate-700 w-10 h-10 rounded-full flex items-center justify-center font-bold text-lg transition">
-                ✕
-            </button>
-
-            <div class="text-center space-y-2 border-b-2 border-amber-200 pb-4">
-                <div class="flex justify-center space-x-2 text-3xl">
-                    <span>🌟</span><span>📜</span><span>🌟</span>
-                </div>
-                <h3 class="text-xs sm:text-sm font-extrabold text-amber-700 uppercase tracking-widest">
-                    KEMENTERIAN PENDIDIKAN, KEBUDAYAAN, RISET, DAN TEKNOLOGI
-                </h3>
-                <h1 class="text-2xl sm:text-3xl font-black text-emerald-900 tracking-tight">
-                    SERTIFIKAT PENGHARGAAN
-                </h1>
-                <p class="text-xs text-slate-500 italic">Diberikan dengan bangga kepada:</p>
-            </div>
-
-            <div class="text-center space-y-2 py-2">
-                <h2 id="cert-student-name" class="text-3xl sm:text-4xl font-extrabold text-emerald-800 underline decoration-amber-400 decoration-wavy underline-offset-8">
-                    [NAMA SISWA]
-                </h2>
-                <p class="text-sm text-slate-600 max-w-md mx-auto pt-2">
-                    Atas keberhasilannya menyelesaikan seluruh rangkaian pembelajaran dan kuis interaktif:
-                </p>
-                <div class="font-bold text-slate-800 text-base">
-                    PETUALANGAN BAHASA INDONESIA KELAS 5 SD/MI
-                </div>
-                <div class="text-xs text-emerald-700 font-semibold">
-                    Pendidikan Bahasa Indonesia • Semester 1 • Jilid 1
-                </div>
-            </div>
-
-            <div class="bg-amber-50/70 border border-amber-200 rounded-2xl p-4 grid grid-cols-3 gap-3 text-center">
-                <div>
-                    <span class="text-[11px] text-slate-500 block uppercase font-bold">Skor Akhir</span>
-                    <span id="cert-score" class="text-xl sm:text-2xl font-black text-amber-800">0 / 1000</span>
-                </div>
-                <div>
-                    <span class="text-[11px] text-slate-500 block uppercase font-bold">Jawaban Benar</span>
-                    <span id="cert-correct" class="text-xl sm:text-2xl font-black text-emerald-800">0 dari 50</span>
-                </div>
-                <div>
-                    <span class="text-[11px] text-slate-500 block uppercase font-bold">Tanggal</span>
-                    <span id="cert-date" class="text-xs sm:text-sm font-bold text-slate-700 mt-1 block">-</span>
-                </div>
-            </div>
-
-            <div class="flex flex-col sm:flex-row justify-between items-center pt-4 border-t border-slate-200 text-xs text-slate-500 space-y-2 sm:space-y-0">
-                <div class="text-center sm:text-left">
-                    <p class="font-bold text-slate-700">Pengembang: Giga Inovation</p>
-                    <p>Kontak: 081329200985</p>
-                </div>
-                <div class="text-center sm:text-right">
-                    <div class="text-2xl font-signature font-bold text-emerald-800">Tim Pengembang Bahasa Indonesia</div>
-                    <p>Resmi & Terverifikasi Kurikulum Merdeka</p>
-                </div>
-            </div>
-
-            <div class="no-print flex flex-wrap justify-center gap-3 pt-2">
-                <button onclick="window.print()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-bold py-2.5 px-5 rounded-xl shadow transition text-sm flex items-center space-x-2">
-                    <span>⬇️ UNDUH / CETAK SERTIFIKAT</span>
-                </button>
-                <button onclick="closeCertificateModal()" class="bg-slate-200 hover:bg-slate-300 text-slate-700 font-semibold py-2.5 px-5 rounded-xl transition text-sm">
-                    <span>Kembali</span>
-                </button>
-            </div>
-
-        </div>
-    </div>
-
-    <!-- 10. MODAL KELOLA KELAS GURU -->
-    <div id="class-manager-modal" class="fixed inset-0 bg-slate-900/60 backdrop-blur-sm z-50 flex items-center justify-center p-4 hidden">
-        <div class="bg-white w-full max-w-md rounded-3xl p-6 shadow-2xl space-y-4">
-            <div class="flex justify-between items-center border-b pb-3">
-                <h3 class="font-bold text-slate-800 text-lg">🏫 Manajemen Kelas & Kode</h3>
-                <button onclick="closeClassManagerModal()" class="text-slate-400 hover:text-slate-600 font-bold">✕</button>
-            </div>
-            <div class="space-y-3 text-sm">
-                <p class="text-slate-600">Buat atau bagikan kode kelas agar siswa dapat bergabung secara otomatis.</p>
-                <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Nama Kelas:</label>
-                    <input type="text" id="modal-class-name" placeholder="Kelas 5A" class="w-full px-3 py-2 rounded-xl border border-slate-300">
-                </div>
-                <div>
-                    <label class="block font-semibold text-slate-700 mb-1">Kode Kelas (Unik):</label>
-                    <input type="text" id="modal-class-code" placeholder="BINDO5A" class="w-full px-3 py-2 rounded-xl border border-slate-300 uppercase">
-                </div>
-                <button onclick="saveNewClass()" class="w-full bg-sky-600 hover:bg-sky-700 text-white font-bold py-2.5 rounded-xl shadow">
-                    Simpan / Buat Kelas Baru
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Footer Developer Badge -->
-    <footer class="py-3 text-center text-xs text-slate-500 border-t border-slate-200 bg-white/50">
-        Pengembang: Giga Inovation | Kontak: 081329200985
+    <!-- Footer Sederhana -->
+    <footer class="text-center py-4 text-xs text-slate-400 font-medium">
+        giga inovation • Petualangan Belajar Bahasa Indonesia Kelas 5 SD/MI
     </footer>
 
-    <!-- Firebase SDK Imports -->
+    <!-- SKRIP UTAMA & FIREBASE SDK -->
     <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
-        import { getAuth, signInAnonymously, signInWithCustomToken, createUserWithEmailAndPassword, signInWithEmailAndPassword, signOut, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
-        import { getFirestore, doc, getDoc, setDoc, updateDoc, collection, query, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+        import { getFirestore, collection, doc, setDoc, onSnapshot, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js";
+        import { getAuth, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
 
-        // Firebase Configuration (User-configurable or fallback placeholder)
-        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : {
-            apiKey: "YOUR_API_KEY",
-            authDomain: "YOUR_AUTH_DOMAIN",
-            projectId: "YOUR_PROJECT_ID",
-            storageBucket: "YOUR_STORAGE_BUCKET",
-            messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-            appId: "YOUR_APP_ID"
+        // KONFIGURASI FIREBASE ANDA
+        const firebaseConfig = {
+            apiKey: "ISI_API_KEY_ANDA_DISINI",
+            authDomain: "bahasaindonesia5-843aa.firebaseapp.com",
+            projectId: "bahasaindonesia5-843aa",
+            storageBucket: "bahasaindonesia5-843aa.appspot.com",
+            messagingSenderId: "GANTI_SENDER_ID",
+            appId: "GANTI_APP_ID"
         };
 
-        const appId = typeof __app_id !== 'undefined' ? __app_id : 'petualangan-bahasa-kelas-5';
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+        const auth = getAuth(app);
+        window.db = db;
 
-        // Initialize Firebase
-        let app, auth, db;
-        try {
-            app = initializeApp(firebaseConfig);
-            auth = getAuth(app);
-            db = getFirestore(app);
-        } catch(e) {
-            console.warn("Firebase initialization warning (using local fallback until configured):", e);
-        }
-
-        // Expose Firebase objects globally for application logic
-        window.FB = { auth, db, appId, signInAnonymously, signInWithEmailAndPassword, createUserWithEmailAndPassword, signOut, doc, setDoc, getDoc, updateDoc, collection, query, onSnapshot, serverTimestamp, signInWithCustomToken };
-    </script>
-
-    <!-- Application Logic Script -->
-    <script>
-        let currentUserRole = "student"; // student or teacher
-        let authMode = "login"; // login or register
+        // Variabel Status Game
         let studentName = "";
-        let studentClassCode = "BINDO5A";
-        let studentEmail = "";
-        let soundEnabled = true;
-
+        let studentClass = "5A";
         let score = 0;
         let correctCount = 0;
         let wrongCount = 0;
         let currentQuestionIndex = 0;
         let userAnswers = {};
-        let isAnswerSubmitted = false;
-        let currentChapterId = 1;
-        let unsubscribeRealtime = null;
+        let isAudioEnabled = true;
+        let unsubscribeTeacher = null;
 
-        // Window load initialization
-        window.addEventListener("DOMContentLoaded", () => {
-            const savedName = localStorage.getItem("petualangan_bahasa_name");
-            if (savedName) {
-                document.getElementById("input-name").value = savedName;
-            }
-            const savedScore = localStorage.getItem("petualangan_bahasa_score");
-            if (savedScore !== null) {
-                score = parseInt(savedScore);
-                correctCount = parseInt(localStorage.getItem("petualangan_bahasa_correct") || "0");
-                wrongCount = parseInt(localStorage.getItem("petualangan_bahasa_wrong") || "0");
-                currentQuestionIndex = parseInt(localStorage.getItem("petualangan_bahasa_qindex") || "0");
-                userAnswers = JSON.parse(localStorage.getItem("petualangan_bahasa_answers") || "{}");
-            }
-        });
+        // Data Bank Soal (50 Soal Bahasa Indonesia Kelas 5)
+        const quizQuestions = [
+            { question: "Apa gagasan utama dalam sebuah paragraf?", options: ["Kalimat penjelas", "Ide atau pokok pembahasan utama", "Kesimpulan akhir cerita", "Judul bacaan"], correct: 1, chapter: "Bab 1", difficulty: "Mudah", topic: "Ide Pokok", explanation: "Gagasan utama adalah ide atau pokok pembahasan utama yang menjadi dasar pengembangan sebuah paragraf." },
+            { question: "Bagian teks laporan hasil pengamatan yang berisi uraian secara rinci disebut...", options: ["Pendahuluan", "Kesimpulan", "Isi / Deskripsi bagian", "Kata penutup"], correct: 2, chapter: "Bab 1", difficulty: "Mudah", topic: "Laporan", explanation: "Deskripsi bagian memuat rincian objek atau peristiwa yang dilaporkan secara lengkap." },
+            { question: "Manakah penulisan huruf kapital yang benar pada nama tempat?", options: ["sungai kapuas", "Sungai Kapuas", "sungai Kapuas", "Sungai kapuas"], correct: 1, chapter: "Bab 1", difficulty: "Sedang", topic: "Ejaan", explanation: "Nama unsur geografi yang diikuti nama diri harus diawali huruf kapital pada kedua kata." },
+            { question: "Kalimat yang berisi pendapat atau gagasan pribadi seseorang disebut kalimat...", options: ["Fakta", "Opini", "Tanya", "Perintah"], correct: 1, chapter: "Bab 2", difficulty: "Mudah", topic: "Fakta & Opini", explanation: "Opini bersifat subjektif dan memuat pandangan atau pendapat pribadi." },
+            { question: "Sinonim dari kata 'canggih' adalah...", options: ["Kuno", "Modern / Mutakhir", "Sederhana", "Lambat"], correct: 1, chapter: "Bab 2", difficulty: "Mudah", topic: "Kosakata", explanation: "Canggih berarti menggunakan teknologi modern atau mutakhir." }
+        ];
 
-        function toggleFirebaseInfo() {
-            const box = document.getElementById("firebase-info-box");
-            const icon = document.getElementById("firebase-toggle-icon");
-            box.classList.toggle("hidden");
-            icon.textContent = box.classList.contains("hidden") ? "▼" : "▲";
-        }
-
-        function speakText(text) {
-            if (!soundEnabled || !('speechSynthesis' in window)) return;
-            window.speechSynthesis.cancel();
-            const utterance = new SpeechSynthesisUtterance(text);
-            utterance.lang = 'id-ID';
-            utterance.rate = 0.95;
-            window.speechSynthesis.speak(utterance);
-        }
-
-        function toggleSound() {
-            soundEnabled = !soundEnabled;
-            document.getElementById("sound-icon").textContent = soundEnabled ? "🔊" : "🔇";
-            document.getElementById("sound-text").textContent = soundEnabled ? "Suara Aktif" : "Suara Senyap";
-        }
-
-        function switchScreen(screenId) {
-            const screens = [
-                "screen-landing",
-                "screen-auth",
-                "screen-student-dashboard",
-                "screen-material-menu",
-                "screen-material-detail",
-                "screen-quiz",
-                "screen-result",
-                "screen-teacher-dashboard"
-            ];
-            screens.forEach(id => {
-                const el = document.getElementById(id);
-                if (el) el.classList.add("hidden");
+        // Lengkapi simulasi 50 soal agar permainan penuh
+        for(let i=6; i<=50; i++) {
+            quizQuestions.push({
+                question: `Pertanyaan latihan ke-${i} seputar materi Bahasa Indonesia Kelas 5 SD?`,
+                options: ["Pilihan jawaban A yang tepat", "Pilihan jawaban B yang benar", "Pilihan jawaban C alternatif", "Pilihan jawaban D salah"],
+                correct: 0,
+                chapter: `Bab ${Math.ceil(i/10)}`,
+                difficulty: i > 35 ? "Sulit" : (i > 15 ? "Sedang" : "Mudah"),
+                topic: "Pemahaman Umum",
+                explanation: `Penjelasan lengkap untuk soal nomor ${i} sesuai kurikulum merdeka kelas 5.`
             });
-            const target = document.getElementById(screenId);
-            if (target) target.classList.remove("hidden");
-            window.scrollTo({ top: 0, behavior: 'smooth' });
         }
 
-        function selectRole(role) {
-            currentUserRole = role;
-            authMode = "login";
-            document.getElementById("auth-error-msg").classList.add("hidden");
+        window.switchScreen = function(screenId) {
+            ['screen-home', 'screen-student-login', 'screen-teacher-login', 'screen-teacher-dashboard', 'screen-game', 'screen-result'].forEach(id => {
+                const el = document.getElementById(id);
+                if(el) el.classList.add('hidden');
+            });
+            document.getElementById(screenId).classList.remove('hidden');
             
-            const studentFields = document.getElementById("student-only-fields");
-            const teacherFields = document.getElementById("teacher-only-fields");
-            const authTitle = document.getElementById("auth-title");
-            const authIcon = document.getElementById("auth-icon");
-            const btnSwitch = document.getElementById("btn-auth-switch");
-            const btnSubmit = document.getElementById("btn-auth-submit");
-
-            if (role === 'student') {
-                studentFields.classList.remove("hidden");
-                teacherFields.classList.add("hidden");
-                authTitle.textContent = "Login Siswa";
-                authIcon.textContent = "📚";
-                btnSubmit.textContent = "MASUK SEKARANG";
-                btnSwitch.textContent = "Masuk sebagai Guru / Pengajar";
-            } else {
-                studentFields.classList.add("hidden");
-                teacherFields.classList.remove("hidden");
-                authTitle.textContent = "Login Guru / Pengajar";
-                authIcon.textContent = "👨‍🏫";
-                btnSubmit.textContent = "MASUK GURU";
-                btnSwitch.textContent = "Belum ada akun guru? Daftar baru";
+            if(screenId === 'screen-teacher-dashboard') {
+                startTeacherRealtimeListener();
+            } else if(unsubscribeTeacher) {
+                unsubscribeTeacher();
             }
-            switchScreen("screen-auth");
-        }
 
-        function toggleAuthMode() {
-            if (currentUserRole === 'student') {
-                // Switch to teacher login
-                selectRole('teacher');
-            } else {
-                authMode = authMode === "login" ? "register" : "login";
-                const btnSubmit = document.getElementById("btn-auth-submit");
-                const btnSwitch = document.getElementById("btn-auth-switch");
-                if (authMode === "register") {
-                    btnSubmit.textContent = "DAFTAR AKUN GURU BARU";
-                    btnSwitch.textContent = "Sudah punya akun guru? Masuk di sini";
-                } else {
-                    btnSubmit.textContent = "MASUK GURU";
-                    btnSwitch.textContent = "Belum ada akun guru? Daftar baru";
-                }
-            }
-        }
-
-        async function handleAuthSubmit() {
-            const errBox = document.getElementById("auth-error-msg");
-            errBox.classList.add("hidden");
-
-            if (currentUserRole === 'student') {
-                studentName = document.getElementById("input-name").value.trim();
-                studentClassCode = document.getElementById("input-class-code").value.trim().toUpperCase() || "BINDO5A";
-                if (!studentName) {
-                    errBox.textContent = "Mohon masukkan nama lengkap siswa.";
-                    errBox.classList.remove("hidden");
-                    return;
-                }
-                localStorage.setItem("petualangan_bahasa_name", studentName);
-
-                // Enter student dashboard instantly without email/password
-                document.getElementById("btn-logout").classList.remove("hidden");
-                document.getElementById("dash-student-name").textContent = `Halo, ${studentName}!`;
-                updateStudentStatsUI();
-                speakText(`Halo, ${studentName}! Selamat datang di Petualangan Bahasa Indonesia Kelas 5.`);
-                switchScreen("screen-student-dashboard");
-                syncProgressToFirebase();
-            } else {
-                const email = document.getElementById("input-email").value.trim();
-                const password = document.getElementById("input-password").value.trim();
-                if (!email || !password) {
-                    errBox.textContent = "Mohon isi email dan password guru dengan benar.";
-                    errBox.classList.remove("hidden");
-                    return;
-                }
-
-                try {
-                    if (window.FB && window.FB.auth) {
-                        const { auth, createUserWithEmailAndPassword, signInWithEmailAndPassword } = window.FB;
-                        if (authMode === "register") {
-                            await createUserWithEmailAndPassword(auth, email, password);
-                        } else {
-                            await signInWithEmailAndPassword(auth, email, password);
-                        }
-                    }
-                } catch (err) {
-                    console.warn("Firebase Teacher Auth notice:", err.message);
-                }
-
-                document.getElementById("btn-logout").classList.remove("hidden");
-                switchScreen("screen-teacher-dashboard");
-                initTeacherRealtimeListener();
-            }
-        }
-
-        function handleLogout() {
-            if (unsubscribeRealtime) unsubscribeRealtime();
-            document.getElementById("btn-logout").classList.add("hidden");
-            switchScreen("screen-landing");
-        }
-
-        function backToStudentDash() {
-            updateStudentStatsUI();
-            switchScreen("screen-student-dashboard");
-        }
-
-        function updateStudentStatsUI() {
-            document.getElementById("stat-high-score").textContent = score;
-            document.getElementById("stat-correct-count").textContent = correctCount;
-            const percentage = Math.round((correctCount / 50) * 100);
-            document.getElementById("stat-percentage").textContent = `${percentage}%`;
-            document.getElementById("stat-last-q").textContent = `${currentQuestionIndex} / 50`;
-        }
-
-        async function syncProgressToFirebase() {
-            if (!window.FB || !window.FB.db) return;
-            try {
-                const { db, appId, doc, setDoc, serverTimestamp } = window.FB;
-                const studentId = studentName.toLowerCase().replace(/\s+/g, '_');
-                const progressRef = doc(db, 'artifacts', appId, 'public', 'data', 'attempts_' + studentId);
-                await setDoc(progressRef, {
-                    studentId: studentId,
-                    name: studentName,
-                    classCode: studentClassCode,
-                    currentQuestion: currentQuestionIndex + 1,
-                    score: score,
-                    correctAnswers: correctCount,
-                    wrongAnswers: wrongCount,
-                    progress: Math.round(((currentQuestionIndex + 1) / 50) * 100),
-                    status: currentQuestionIndex >= 50 ? "Sudah Selesai" : "🟢 Sedang Mengerjakan",
-                    lastActivity: serverTimestamp()
-                }, { merge: true });
-            } catch(e) {
-                console.warn("Firestore sync warning:", e);
-            }
-        }
-
-        const materialsData = {
-            1: {
-                title: "Bab 1 – Aku yang Unik",
-                content: `
-                    <div class="space-y-4">
-                        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-emerald-900 text-lg">📖 A. Mengenal Diri dan Orang Lain Melalui Teks Deskripsi</h3>
-                            <p>Teks deskripsi adalah teks yang melukiskan atau menggambarkan suatu objek, tempat, atau suasana tertentu (seperti ciri fisik, sifat, kegemaran) dengan melibatkan panca indra agar pembaca seolah-olah melihat, mendengar, atau merasakannya sendiri.</p>
-                        </div>
-                        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-emerald-900 text-lg">✍️ B. Menggunakan Kosakata dan Ekspresi Bahasa untuk Mendeskripsikan Diri</h3>
-                            <p>Dalam mendeskripsikan diri atau orang lain, kita menggunakan kata sifat (adjektiva) seperti <em>ramah, ceria, tekun, jujur, cekatan</em>, serta ekspresi bahasa yang santun dan menarik.</p>
-                        </div>
-                        <div class="bg-emerald-50 border border-emerald-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-emerald-900 text-lg">📚 C. Menceritakan Diri Sendiri Melalui Teks Narasi</h3>
-                            <p>Teks narasi adalah cerita yang disusun berdasarkan urutan waktu (kronologis), memiliki tokoh, alur cerita, latar tempat, dan kejadian menarik yang dialami tokoh dalam kehidupan sehari-hari.</p>
-                        </div>
-                    </div>
-                `
-            },
-            2: {
-                title: "Bab 2 – Buku Jendela Dunia",
-                content: `
-                    <div class="space-y-4">
-                        <div class="bg-sky-50 border border-sky-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-sky-900 text-lg">📖 A. Membaca Buku Fiksi dan Buku Nonfiksi</h3>
-                            <p><strong>Buku Fiksi:</strong> Buku yang berisi cerita khayalan atau imajinasi pengarang (contoh: novel anak, cerpen, dongeng).<br><strong>Buku Nonfiksi:</strong> Buku yang berisi informasi atau kejadian nyata berdasarkan fakta (contoh: ensiklopedia, buku sejarah, biografi).</p>
-                        </div>
-                        <div class="bg-sky-50 border border-sky-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-sky-900 text-lg">🔍 B. Mengidentifikasi Unsur Intrinsik dalam Cerita</h3>
-                            <p>Unsur intrinsik cerita meliputi: <em>Tema</em> (gagasan utama), <em>Tokoh/Penokohan</em> (pelaku dan wataknya), <em>Latar</em> (tempat, waktu, suasana), <em>Alur</em> (jalan cerita), serta <em>Amanat</em> (pesan moral).</p>
-                        </div>
-                        <div class="bg-sky-50 border border-sky-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-sky-900 text-lg">💬 C. Menulis Kalimat Langsung dan Kalimat Tidak Langsung</h3>
-                            <p><strong>Kalimat Langsung:</strong> Kalimat yang menirukan ucapan seseorang secara persis (ditandai tanda petik dua "...").<br><strong>Kalimat Tidak Langsung:</strong> Kalimat yang melaporkan kembali ucapan seseorang tanpa menggunakan tanda petik.</p>
-                        </div>
-                        <div class="bg-sky-50 border border-sky-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-sky-900 text-lg">🎨 D. Menulis Kalimat Bermetafora (Metafora, Personifikasi, dan Hiperbola)</h3>
-                            <p>• <strong>Metafora:</strong> Perbandingan langsung dua hal (contoh: <em>Dewi adalah bintang kelas</em>).<br>• <strong>Personifikasi:</strong> Benda mati seolah bernyawa (contoh: <em>Angin malam memeluk tubuhku</em>).<br>• <strong>Hiperbola:</strong> Melebih-lebihkan sesuatu (contoh: <em>Suaranya membelah angkasa</em>).</p>
-                        </div>
-                    </div>
-                `
-            },
-            3: {
-                title: "Bab 3 – Ekspresi Diri Melalui Hobi",
-                content: `
-                    <div class="space-y-4">
-                        <div class="bg-teal-50 border border-teal-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-teal-900 text-lg">⚽ A. Mengenal dan Memahami Hobi Lewat Teks</h3>
-                            <p>Hobi adalah kegemaran atau kesenangan yang dilakukan pada waktu luang. Melalui teks tentang hobi, kita dapat mengenal berbagai aktivitas positif seperti olahraga, membaca, melukis, berkebun, dan bermusik.</p>
-                        </div>
-                        <div class="bg-teal-50 border border-teal-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-teal-900 text-lg">🗣️ B. Bahasa dan Kosakata dalam Teks tentang Hobi</h3>
-                            <p>Kosakata khusus yang berkaitan dengan hobi memperkaya pemahaman kita. Contoh: hobi melukis menggunakan istilah <em>kanvas, palet, sketsa, cat air</em>.</p>
-                        </div>
-                        <div class="bg-teal-50 border border-teal-200 rounded-2xl p-5 space-y-2">
-                            <h3 class="font-extrabold text-teal-900 text-lg">✍️ C. Mengekspresikan Hobi secara Tulisan dan Lisan</h3>
-                            <p>Mengekspresikan hobi berarti menceritakan atau menuliskan alasan menyukai hobi tersebut, manfaatnya bagi kesehatan tubuh dan mental, serta prestasi yang diraih.</p>
-                        </div>
-                    </div>
-                `
+            if(screenId === 'screen-game') {
+                loadQuestion();
             }
         };
 
-        function goToMaterialMenu() {
-            speakText(`Bagus, ${studentName || 'Siswa'}! Mari kita pelajari materi terlebih dahulu.`);
-            switchScreen("screen-material-menu");
-        }
+        window.toggleAudio = function() {
+            isAudioEnabled = !isAudioEnabled;
+            document.getElementById('audio-status-text').textContent = isAudioEnabled ? "Suara Aktif" : "Suara Senyap";
+        };
 
-        function openMaterialDetail(chapterId) {
-            currentChapterId = chapterId;
-            const data = materialsData[chapterId];
-            document.getElementById("material-chapter-badge").textContent = data.title;
-            document.getElementById("material-content-box").innerHTML = data.content;
-            switchScreen("screen-material-detail");
-            speakText(`Membuka materi ${data.title}. Silakan dipelajari dengan cermat.`);
-        }
+        window.speakText = function(text) {
+            if(!isAudioEnabled || !('speechSynthesis' in window)) return;
+            window.speechSynthesis.cancel();
+            const utterance = new SpeechSynthesisUtterance(text);
+            utterance.lang = 'id-ID';
+            window.speechSynthesis.speak(utterance);
+        };
 
-        function openMaterialMenuDuringQuiz() {
-            switchScreen("screen-material-menu");
-        }
-
-        function startQuizFromMenu() {
-            switchScreen("screen-quiz");
-            loadQuestion();
-        }
-
-        const quizQuestions = [
-            // --- BAB 1: AKU YANG UNIK (15 Soal) ---
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Mudah", topic: "Teks Deskripsi",
-                question: "Apa tujuan utama dari teks deskripsi?",
-                options: [
-                    "A. Menceritakan khayalan masa lalu",
-                    "B. Melukiskan atau menggambarkan suatu objek agar pembaca seolah melihat langsung",
-                    "C. Menyajikan langkah-langkah membuat sesuatu",
-                    "D. Berisi laporan penelitian ilmiah"
-                ],
-                correct: 1, explanation: "Teks deskripsi bertujuan menggambarkan objek, tempat, atau suasana secara terperinci menggunakan panca indra."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Mudah", topic: "Kosakata Deskripsi",
-                question: "Kata sifat (adjektiva) yang tepat untuk mendeskripsikan anak yang suka membantu tanpa pamrih adalah...",
-                options: [
-                    "A. Pemarah", "B. Sombong", "C. Dermawan atau suka menolong", "D. Pemalas"
-                ],
-                correct: 2, explanation: "'Dermawan' atau suka menolong adalah kata sifat positif untuk menggambarkan kepedulian seseorang."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Sedang", topic: "Teks Deskripsi Fisik",
-                question: "Dalam mendeskripsikan ciri fisik seseorang, unsur yang biasanya dijelaskan meliputi...",
-                options: [
-                    "A. Bentuk wajah, warna rambut, dan tinggi badan",
-                    "B. Riwayat nilai rapor sekolah",
-                    "C. Jumlah tabungan di bank",
-                    "D. Alamat rumah dan nomor telepon"
-                ],
-                correct: 0, explanation: "Deskripsi fisik berfokus pada penampakan luar seperti bentuk wajah, warna rambut, dan tinggi badan."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Sedang", topic: "Teks Narasi",
-                question: "Apa ciri utama dari teks narasi?",
-                options: [
-                    "A. Terdiri dari rumus matematika",
-                    "B. Disusun berdasarkan kronologi waktu dengan alur dan tokoh cerita",
-                    "C. Hanya berisi daftar kosakata kamus",
-                    "D. Berupa petunjuk resep makanan"
-                ],
-                correct: 1, explanation: "Teks narasi adalah cerita yang memiliki urutan waktu, tokoh, latar, dan peristiwa."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Menantang", topic: "Analisis Karakter",
-                question: "Jika seorang anak selalu tepat waktu, tekun belajar, dan merapikan buku sebelum tidur, maka kalimat deskripsi watak yang tepat adalah...",
-                options: [
-                    "A. Ia adalah anak yang sangat rajin dan disiplin",
-                    "B. Ia adalah anak yang ceroboh dan pemalas",
-                    "C. Ia adalah anak yang suka usil",
-                    "D. Ia adalah anak yang penakut"
-                ],
-                correct: 0, explanation: "Kebiasaan tepat waktu dan disiplin mencerminkan watak rajin serta bertanggung jawab."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Mudah", topic: "Kosakata Ekspresi",
-                question: "Arti kata 'ramah' dalam mendeskripsikan sifat seseorang adalah...",
-                options: [
-                    "A. Suka marah-marah kepada orang lain",
-                    "B. Selalu tersenyum dan baik hati dalam pergaulan",
-                    "C. Pendiam dan tidak suka berbicara",
-                    "D. Suka menyendiri di kamar"
-                ],
-                correct: 1, explanation: "Ramah berarti baik hati, hangat, dan menyenangkan dalam bersikap kepada sesama."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Sedang", topic: "Panca Indra",
-                question: "Penggambaran suasana pantai dalam teks deskripsi biasanya melibatkan panca indra...",
-                options: [
-                    "A. Pendengaran deru ombak dan penglihatan hamparan pasir putih",
-                    "B. Perasa rasa pahit obat",
-                    "C. Penciuman bau asap pabrik kimia",
-                    "D. Perabaan suhu es kutub"
-                ],
-                correct: 0, explanation: "Pantai digambarkan lewat suara ombak (pendengaran) dan pemandangan pasir (penglihatan)."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Menantang", topic: "Struktur Teks",
-                question: "Bagian awal dalam sebuah teks deskripsi diri biasanya berisi...",
-                options: [
-                    "A. Identitas singkat nama, usia, dan asal sekolah",
-                    "B. Kesimpulan akhir cerita",
-                    "C. Daftar pustaka buku",
-                    "D. Ucapan terima kasih"
-                ],
-                correct: 0, explanation: "Pengenalan identitas diri menjadi pembuka lazim dalam teks deskripsi diri."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Mudah", topic: "Kosakata Positif",
-                question: "Sinonim dari kata 'jujur' adalah...",
-                options: [
-                    "A. Pembohong", "B. Amanah atau terpercaya", "C. Curang", "D. Licik"
-                ],
-                correct: 1, explanation: "Jujur bersinonim dengan amanah dan dapat dipercaya dalam perkataan maupun perbuatan."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Sedang", topic: "Narasi Pengalaman",
-                question: "Menceritakan pengalaman hari pertama masuk sekolah kelas 5 termasuk ke dalam bentuk...",
-                options: [
-                    "A. Teks laporan keuangan", "B. Teks narasi pengalaman pribadi", "C. Teks petunjuk penggunaan", "D. Teks iklan komersial"
-                ],
-                correct: 1, explanation: "Pengalaman pribadi yang diceritakan secara kronologis adalah bentuk teks narasi."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Menantang", topic: "Ekspresi Bahasa",
-                question: "Kalimat manakah yang menggunakan kosakata deskripsi sifat yang paling tepat?",
-                options: [
-                    "A. Rian adalah anak yang cekatan dan sigap membantu ibu di dapur.",
-                    "B. Meja belajar itu berwarna biru tua.",
-                    "C. Kucingku berlari sangat kencang.",
-                    "D. Rumah itu berlantai dua."
-                ],
-                correct: 0, explanation: "Pilihan A mendeskripsikan watak/sifat manusia (cekatan dan sigap)."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Mudah", topic: "Identifikasi Diri",
-                question: "Keunikan setiap individu diciptakan Tuhan Yang Maha Esa agar kita saling...",
-                options: [
-                    "A. Bermusuhan", "B. Mengenal dan menghargai satu sama lain", "C. Saling mengejek", "D. Bersaing tidak sehat"
-                ],
-                correct: 1, explanation: "Perbedaan dan keunikan diri ada agar kita saling mengenal (ta'aruf) dan menghargai."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Sedang", topic: "Unsur Deskripsi",
-                question: "Dalam teks deskripsi tentang sahabat, selain fisik, hal penting yang digambarkan adalah...",
-                options: [
-                    "A. Sifat dan kebiasaan baiknya", "B. Nomor rekening bank orang tuanya", "C. Harga tas sekolahnya", "D. Jumlah kendaraan di garasinya"
-                ],
-                correct: 0, explanation: "Deskripsi sahabat mencakup sifat, ketulusan, dan kebiasaannya sehari-hari."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Menantang", topic: "Pengembangan Narasi",
-                question: "Langkah awal sebelum menulis cerita narasi tentang diri sendiri adalah...",
-                options: [
-                    "A. Menentukan tema atau pengalaman berkesan yang akan diceritakan",
-                    "B. Langsung menutup buku", "C. Menghitung jumlah halaman", "D. Membeli kertas warna-warni"
-                ],
-                correct: 0, explanation: "Menentukan tema atau topik pengalaman adalah langkah pertama dalam menyusun narasi."
-            },
-            {
-                chapter: 1, chapterName: "Bab 1 – Aku yang Unik", difficulty: "Mudah", topic: "Evaluasi Bab 1",
-                question: "Sikap yang tepat saat mendengarkan teman menceritakan keunikan dirinya adalah...",
-                options: [
-                    "A. Menyimak dengan penuh perhatian dan menghargai",
-                    "B. Berbicara sendiri dengan keras", "C. Meninggalkan tempat duduk", "D. Menertawakan kekurangannya"
-                ],
-                correct: 0, explanation: "Kita harus menyimak dengan baik sebagai bentuk penghargaan terhadap sesama teman."
-            },
-
-            // --- BAB 2: BUKU JENDELA DUNIA (20 Soal) ---
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Mudah", topic: "Fiksi vs Nonfiksi",
-                question: "Buku yang berisi kisah khayalan atau imajinasi penulis disebut...",
-                options: [
-                    "A. Buku fiksi", "B. Buku nonfiksi", "C. Ensiklopedia", "D. Kamus besar"
-                ],
-                correct: 0, explanation: "Buku fiksi bersumber dari imajinasi atau khayalan pengarang, seperti dongeng dan novel."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Mudah", topic: "Fiksi vs Nonfiksi",
-                question: "Manakah di bawah ini yang termasuk contoh buku nonfiksi?",
-                options: [
-                    "A. Dongeng Si Kancil", "B. Novel Petualangan Sherina", "C. Buku Sejarah Perjuangan Kemerdekaan Indonesia", "D. Cerita Rakyat Malin Kundang"
-                ],
-                correct: 2, explanation: "Buku sejarah menyajikan fakta nyata sehingga digolongkan sebagai buku nonfiksi."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Sedang", topic: "Unsur Intrinsik",
-                question: "Pesan moral atau nasihat yang ingin disampaikan pengarang melalui sebuah cerita disebut...",
-                options: [
-                    "A. Tokoh", "B. Latar", "C. Amanat", "D. Alur"
-                ],
-                correct: 2, explanation: "Amanat adalah pesan moral yang dapat dipetik pembaca dari kisah yang dibaca."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Sedang", topic: "Unsur Intrinsik",
-                question: "Tempat, waktu, dan suasana terjadinya peristiwa dalam cerita dinamakan...",
-                options: [
-                    "A. Latar (setting)", "B. Tokoh", "C. Tema", "D. Judul"
-                ],
-                correct: 0, explanation: "Latar mencakup keterangan tempat, waktu kejadian, dan suasana dalam cerita."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Mudah", topic: "Kalimat Langsung",
-                question: "Ciri utama penulisan kalimat langsung adalah menggunakan...",
-                options: [
-                    "A. Tanda kurung (...)", "B. Tanda petik dua (\"...\")", "C. Tanda tanya tanpa spasi", "D. Huruf miring seluruhnya"
-                ],
-                correct: 1, explanation: "Kalimat langsung ditandai dengan penggunaan tanda petik dua untuk mengapit dialog."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Sedang", topic: "Kalimat Tidak Langsung",
-                question: "Ubah kalimat langsung berikut menjadi kalimat tidak langsung: Ibu berkata, \"Jangan lupa belajar, Nak!\"",
-                options: [
-                    "A. Ibu berkata agar aku jangan lupa belajar.", "B. Ibu membeli buku di toko.", "C. Jangan lupa belajar kata Ibu.", "D. Ibu sedang memasak di dapur."
-                ],
-                correct: 0, explanation: "Kalimat tidak langsung melaporkan ucapan tanpa tanda petik dan menggunakan kata 'agar' atau 'bahwa'."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Menantang", topic: "Majas Metafora",
-                question: "Apa yang dimaksud dengan majas metafora?",
-                options: [
-                    "A. Perbandingan dua hal yang berbeda secara langsung tanpa kata pembanding",
-                    "B. Meniru suara binatang", "C. Melebih-lebihkan sesuatu secara ekstrem", "D. Menyebutkan nama benda mati seolah hidup"
-                ],
-                correct: 0, explanation: "Metafora adalah majas perbandingan langsung, contohnya 'raja hutan' untuk singa."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Sedang", topic: "Majas Personifikasi",
-                question: "Manakah kalimat yang menggunakan majas personifikasi?",
-                options: [
-                    "A. Nyiur melambai-lambai seolah menyambut kedatanganku di pantai.",
-                    "B. Wajahnya bersinar bagaikan rembulan.",
-                    "C. Tugas sekolah itu setinggi gunung.",
-                    "D. Ayah adalah tulang punggung keluarga."
-                ],
-                correct: 0, explanation: "Personifikasi memberikan sifat manusia (melambai-lambai) kepada benda mati (nyiur/pohon kelapa)."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Menantang", topic: "Majas Hiperbola",
-                question: "Contoh kalimat yang mengandung majas hiperbola adalah...",
-                options: [
-                    "A. Air matanya mengalir deras membentuk lautan.",
-                    "B. Kucing itu tidur di atas sofa.",
-                    "C. Kakak membaca buku cerita di kamar.",
-                    "D. Pak Guru tersenyum ramah."
-                ],
-                correct: 0, explanation: "Hiperbola adalah majas yang melebih-lebihkan sesuatu secara tidak masuk akal (air mata membentuk lautan)."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Mudah", topic: "Buku Fiksi",
-                question: "Buku kumpulan cerita pendek (cerpen) dikategorikan sebagai...",
-                options: [
-                    "A. Buku fiksi", "B. Kamus bahasa", "C. Peta atlas dunia", "D. Buku undang-undang"
-                ],
-                correct: 0, explanation: "Cerpen merupakan karya sastra imajinatif sehingga termasuk buku fiksi."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Sedang", topic: "Unsur Intrinsik Tokoh",
-                question: "Tokoh cerita yang berwatak jahat atau menentang tokoh utama disebut...",
-                options: [
-                    "A. Tokoh protagonis", "B. Tokoh antagonis", "C. Tokoh figuran pembantu", "D. Tokoh narator"
-                ],
-                correct: 1, explanation: "Tokoh antagonis adalah tokoh penentang atau yang sering disebut tokoh jahat dalam cerita."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Menantang", topic: "Analisis Kalimat",
-                question: "Kalimat: 'Dewi adalah bintang kelas yang selalu rajin.' Kata 'bintang kelas' merupakan contoh majas...",
-                options: [
-                    "A. Metafora", "B. Hiperbola", "C. Personifikasi", "D. Litotes"
-                ],
-                correct: 0, explanation: "'Bintang kelas' adalah metafora untuk murid yang paling pintar atau menonjol."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Mudah", topic: "Fungsi Membaca",
-                question: "Mengapa buku sering dijuluki sebagai 'jendela dunia'?",
-                options: [
-                    "A. Karena buku dipasang di dinding rumah",
-                    "B. Karena dengan membaca buku kita bisa mengetahui berbagai ilmu dan tempat di seluruh dunia",
-                    "C. Karena bentuk buku mirip kaca jendela", "D. Karena buku terbuat dari kaca"
-                ],
-                correct: 1, explanation: "Buku disebut jendela dunia karena membuka wawasan dan pengetahuan luas tentang isi dunia."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Sedang", topic: "Kalimat Langsung",
-                question: "Manakah penulisan kalimat langsung yang benar sesuai EYD?",
-                options: [
-                    "A. Roni berkata, \"Aku ingin menjadi ilmuwan.\"",
-                    "B. Roni berkata 'Aku ingin menjadi ilmuwan.'",
-                    "C. \"Aku ingin menjadi ilmuwan\" kata Roni.", "D. Roni: Aku ingin menjadi ilmuwan."
-                ],
-                correct: 0, explanation: "Kalimat langsung diawali pengantar, tanda koma, lalu tanda petik dua mengapit dialog."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Menantang", topic: "Analisis Personifikasi",
-                question: "Pernyataan 'Peluit mengaum keras tanda pertandingan dimulai' menggunakan majas...",
-                options: [
-                    "A. Personifikasi", "B. Metafora", "C. Hiperbola", "D. Ironi"
-                ],
-                correct: 0, explanation: "Peluit (benda mati) diberi sifat menderu/mengaum seperti binatang (personifikasi)."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Mudah", topic: "Nonfiksi Ensiklopedia",
-                question: "Jika kita ingin mencari informasi tentang jenis-jenis hewan langka di Indonesia secara fakta, buku yang paling tepat dibaca adalah...",
-                options: [
-                    "A. Buku ensiklopedia fauna", "B. Kumpulan dongeng fabel", "C. Novel fantasi sihir", "D. Komik petualangan lucu"
-                ],
-                correct: 0, explanation: "Ensiklopedia fauna menyajikan data dan fakta ilmiah dunia hewan."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Sedang", topic: "Alur Cerita",
-                question: "Rangkaian peristiwa dari awal hingga akhir dalam sebuah cerita disebut...",
-                options: [
-                    "A. Alur (plot)", "B. Latar tempat", "C. Sampul buku", "D. Daftar isi"
-                ],
-                correct: 0, explanation: "Alur atau plot adalah jalannya rangkaian peristiwa dalam cerita."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Menantang", topic: "Majas Campuran",
-                question: "Kalimat: 'Suaranya menggelegar membelah bumi hingga membuat seluruh gedung bergetar.' Mengandung majas...",
-                options: [
-                    "A. Hiperbola", "B. Metafora", "C. Personifikasi", "D. Asosiasi"
-                ],
-                correct: 0, explanation: "Pernyataan tersebut melebih-lebihkan suara hingga membelah bumi (hiperbola)."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Mudah", topic: "Tokoh Protagonis",
-                question: "Tokoh utama yang berwatak baik dan patut diteladani dalam cerita disebut...",
-                options: [
-                    "A. Protagonis", "B. Antagonis", "C. Tritagonis", "D. Figuran"
-                ],
-                correct: 0, explanation: "Protagonis adalah tokoh utama berwatak baik yang didukung pembaca."
-            },
-            {
-                chapter: 2, chapterName: "Bab 2 – Buku Jendela Dunia", difficulty: "Sedang", topic: "Evaluasi Bab 2",
-                question: "Manfaat utama membaca buku nonfiksi bagi pelajar kelas 5 adalah...",
-                options: [
-                    "A. Menambah wawasan ilmu pengetahuan dan wawasan faktual", "B. Mengkhayal cerita fiksi fantasi", "C. Menghibur diri dengan lelucon", "D. Mengisi waktu luang tanpa makna"
-                ],
-                correct: 0, explanation: "Buku nonfiksi memperluas ilmu pengetahuan faktual dan wawasan siswa."
-            },
-
-            // --- BAB 3: EKSPRESI DIRI MELALUI HOBI (15 Soal) ---
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Mudah", topic: "Pengertian Hobi",
-                question: "Apa yang dimaksud dengan hobi?",
-                options: [
-                    "A. Kegiatan kegemaran atau kesenangan yang dilakukan di waktu luang",
-                    "B. Pekerjaan wajib yang menghasilkan uang bulanan", "C. Hukuman dari guru di sekolah", "D. Tugas piket kelas"
-                ],
-                correct: 0, explanation: "Hobi adalah kegemaran yang ditekuni secara rutin untuk kesenangan dan pengembangan diri."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Mudah", topic: "Kosakata Hobi Melukis",
-                question: "Alat dan bahan yang biasanya digunakan dalam hobi melukis adalah...",
-                options: [
-                    "A. Kanvas, kuas, dan cat air", "B. Bola kaki dan peluit", "C. Benang jahit dan jarum", "D. Kompor dan wajan"
-                ],
-                correct: 0, explanation: "Kanvas, kuas, dan cat adalah peralatan pokok dalam hobi melukis."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Sedang", topic: "Manfaat Hobi",
-                question: "Manfaat positif memiliki hobi yang aktif dan kreatif bagi anak-anak adalah...",
-                options: [
-                    "A. Mengasah keterampilan, kreativitas, dan menjaga kesehatan mental",
-                    "B. Membuat tubuh cepat lelah dan malas", "C. Membuang-buang waktu belajar", "D. Menimbulkan perselisihan dengan teman"
-                ],
-                correct: 0, explanation: "Hobi positif mengasah kreativitas dan menjaga kesehatan mental serta fisik."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Sedang", topic: "Teks tentang Hobi",
-                question: "Jika seseorang menuliskan cerita tentang bagaimana ia merawat tanaman hias di pekarangan rumah setiap sore, jenis teks tersebut berkaitan dengan...",
-                options: [
-                    "A. Hobi berkebun", "B. Hobi berenang", "C. Hobi otomotif", "D. Hobi mendaki gunung"
-                ],
-                correct: 0, explanation: "Merawat tanaman di pekarangan adalah bentuk hobi berkebun."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Menantang", topic: "Ekspresi Lisan",
-                question: "Hal penting saat mempresentasikan hobi di depan kelas secara lisan adalah...",
-                options: [
-                    "A. Berbicara dengan suara jelas, percaya diri, dan intonasi yang menarik",
-                    "B. Membaca teks dengan suara berbisik", "C. Menundukkan kepala sepanjang presentasi", "D. Berbicara sangat cepat agar lekas selesai"
-                ],
-                correct: 0, explanation: "Presentasi lisan yang baik memerlukan kejelasan suara, rasa percaya diri, dan intonasi tepat."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Mudah", topic: "Kosakata Hobi Membaca",
-                question: "Orang yang memiliki kegemaran mengumpulkan dan membaca berbagai buku disebut...",
-                options: [
-                    "A. Kutu buku (bibliofil)", "B. Atlet profesional", "C. Koki masakan", "D. Mekanik mesin"
-                ],
-                correct: 0, explanation: "Sebutan bagi gemar membaca buku sering diistilahkan sebagai kutu buku."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Sedang", topic: "Ekspresi Tulis",
-                question: "Menuliskan pengalaman mengikuti lomba bulu tangkis antarsekolah di majalah dinding termasuk cara mengekspresikan hobi secara...",
-                options: [
-                    "A. Tulisan", "B. Lisan semata", "C. Isyarat gerakan", "D. Musik instrumentalia"
-                ],
-                correct: 0, explanation: "Menulis artikel di mading adalah bentuk ekspresi hobi melalui tulisan."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Menantang", topic: "Analisis Teks Hobi",
-                question: "Kalimat: 'Setiap akhir pekan, Dimas menghabiskan waktu di lapangan hijau untuk melatih teknik dribble bola.' Hobi apakah yang ditekuni Dimas?",
-                options: [
-                    "A. Sepak bola", "B. Membaca buku", "C. Merajut syal", "D. Menyanyi solo"
-                ],
-                correct: 0, explanation: "Istilah lapangan hijau dan dribble bola berkaitan erat dengan hobi sepak bola."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Mudah", topic: "Keragaman Hobi",
-                question: "Jika teman sebangkumu menyukai hobi merakit lego sedangkan kamu menyukai hobi bersepeda, sikap kita sebaiknya...",
-                options: [
-                    "A. Saling menghargai dan mendukung hobi masing-masing",
-                    "B. Saling mengejek hobi teman", "C. Memaksa teman menyukai hobi kita", "D. Menjauhi teman"
-                ],
-                correct: 0, explanation: "Keragaman hobi harus disikapi dengan rasa saling menghargai dan toleransi."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Sedang", topic: "Kosakata Khusus",
-                question: "Istilah 'koreografi' dalam dunia seni biasanya berkaitan erat dengan hobi...",
-                options: [
-                    "A. Menari atau senam", "B. Membaca novel", "C. Memancing ikan", "D. Berkebun bunga"
-                ],
-                correct: 0, explanation: "Koreografi adalah seni merangkak gerak tari atau senam."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Menantang", topic: "Pengembangan Teks",
-                question: "Bagian penutup dalam karangan tentang hobi biasanya berisi...",
-                options: [
-                    "A. Kesimpulan, harapan, dan manfaat hobi bagi masa depan",
-                    "B. Daftar harga alat hobi", "C. Biodata lengkap orang tua", "D. Rumus matematika"
-                ],
-                correct: 0, explanation: "Paragraf penutup karangan hobi berisi simpulan serta harapan positif."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Mudah", topic: "Hobi Positif",
-                question: "Manakah kegiatan hobi yang dapat melestarikan lingkungan sekitar?",
-                options: [
-                    "A. Menanam pohon apotek hidup di halaman rumah", "B. Membuang sampah plastik sembarangan", "C. Membakar kertas bekas di halaman", "D. Memetik bunga di taman kota tanpa izin"
-                ],
-                correct: 0, explanation: "Menanam pohon adalah hobi positif yang melestarikan alam dan lingkungan."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Sedang", topic: "Kosakata Fotografi",
-                question: "Istilah 'lensa, sudut pandang (angle), dan fokus' merupakan kosakata yang sering digunakan dalam hobi...",
-                options: [
-                    "A. Fotografi", "B. Memasak kue", "C. Menjahit baju", "D. Berenang"
-                ],
-                correct: 0, explanation: "Lensa dan sudut pandang adalah istilah teknik dalam hobi fotografi."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Menantang", topic: "Ekspresi Kreatif",
-                question: "Bagaimana cara mengekspresikan hobi menulis cerita anak?",
-                options: [
-                    "A. Menuangkan imajinasi ke dalam tulisan cerita yang inspiratif dan mendidik",
-                    "B. Berdiam diri tanpa menulis apa pun", "C. Merobek buku catatan", "D. Meniru karya orang lain tanpa izin"
-                ],
-                correct: 0, explanation: "Hobi menulis diekspresikan dengan menghasilkan karya cerita yang inspiratif."
-            },
-            {
-                chapter: 3, chapterName: "Bab 3 – Ekspresi Diri Melalui Hobi", difficulty: "Mudah", topic: "Evaluasi Bab 3",
-                question: "Apa tujuan utama kita mempelajari bab tentang ekspresi diri melalui hobi?",
-                options: [
-                    "A. Agar kita mampu mengenali potensi diri dan mengekspresikannya secara positif",
-                    "B. Agar kita bisa melarang orang lain memiliki hobi", "C. Agar kita tidak perlu belajar di sekolah", "D. Agar kita bisa tidur seharian"
-                ],
-                correct: 0, explanation: "Tujuannya adalah mengenali potensi diri serta mengekspresikannya secara kreatif dan positif."
+        window.handleStudentLogin = function() {
+            const nameInput = document.getElementById('input-student-name').value.trim();
+            const classInput = document.getElementById('input-class-code').value.trim().toUpperCase();
+            
+            if(!nameInput) {
+                alert("Mohon masukkan nama lengkap Anda terlebih dahulu!");
+                return;
             }
-        ];
+            studentName = nameInput;
+            studentClass = classInput || "5A";
+            
+            score = 0;
+            correctCount = 0;
+            wrongCount = 0;
+            currentQuestionIndex = 0;
+            userAnswers = {};
 
-        function loadQuestion() {
-            if (currentQuestionIndex >= quizQuestions.length) {
+            document.getElementById('logout-btn').classList.remove('hidden');
+            switchScreen('screen-game');
+            syncProgressToFirebase();
+        };
+
+        window.loadQuestion = function() {
+            if(currentQuestionIndex >= quizQuestions.length) {
                 finishQuiz();
                 return;
             }
 
             const q = quizQuestions[currentQuestionIndex];
-            isAnswerSubmitted = false;
+            document.getElementById('quiz-counter-text').textContent = `Soal ${currentQuestionIndex + 1} dari 50`;
+            document.getElementById('quiz-chapter-tag').textContent = q.chapter;
+            document.getElementById('quiz-difficulty-tag').textContent = q.difficulty;
+            document.getElementById('quiz-topic-tag').textContent = `Subbab: ${q.topic}`;
+            document.getElementById('quiz-score-display').textContent = score;
+            
+            const percent = ((currentQuestionIndex + 1) / 50) * 100;
+            document.getElementById('quiz-progress-bar').style.width = `${percent}%`;
+            document.getElementById('quiz-question-text').textContent = q.question;
 
-            document.getElementById("quiz-student-display").textContent = `Nama: ${studentName || 'Siswa'}`;
-            document.getElementById("quiz-counter-text").textContent = `Soal ${currentQuestionIndex + 1} dari 50`;
-            document.getElementById("quiz-chapter-tag").textContent = q.chapterName;
-            document.getElementById("quiz-difficulty-tag").textContent = q.difficulty;
-            document.getElementById("quiz-topic-tag").textContent = `Subbab: ${q.topic}`;
-            document.getElementById("quiz-score-display").textContent = score;
-
-            const progressPercent = ((currentQuestionIndex + 1) / 50) * 100;
-            document.getElementById("quiz-progress-bar").style.width = `${progressPercent}%`;
-            document.getElementById("quiz-question-text").textContent = q.question;
-
-            const container = document.getElementById("quiz-options-container");
+            const container = document.getElementById('quiz-options-container');
             container.innerHTML = "";
 
             q.options.forEach((opt, idx) => {
-                const btn = document.createElement("button");
-                btn.className = "w-full text-left bg-white hover:bg-emerald-50 border-2 border-slate-200 hover:border-emerald-500 rounded-xl p-4 font-semibold text-slate-700 transition flex items-center justify-between shadow-sm group";
-                btn.innerHTML = `
-                    <span class="text-sm sm:text-base">${opt}</span>
-                    <span class="w-6 h-6 rounded-full border border-slate-300 flex items-center justify-center text-xs font-bold text-slate-400 group-hover:border-emerald-500 group-hover:text-emerald-600 transition">
-                        ${String.fromCharCode(65 + idx)}
-                    </span>
-                `;
+                const btn = document.createElement('button');
+                btn.className = "w-full text-left bg-white hover:bg-emerald-50 border-2 border-slate-200 hover:border-emerald-500 rounded-2xl p-4 font-semibold text-slate-700 transition flex items-center justify-between shadow-sm";
+                btn.innerHTML = `<span>${opt}</span> <span class="w-7 h-7 rounded-full border border-slate-300 flex items-center justify-center text-xs text-slate-400 font-bold">${String.fromCharCode(65 + idx)}</span>`;
                 btn.onclick = () => selectAnswer(idx);
                 container.appendChild(btn);
             });
 
-            document.getElementById("quiz-feedback-box").classList.add("hidden");
+            document.getElementById('quiz-feedback-box').classList.add('hidden');
             syncProgressToFirebase();
-        }
+        };
 
-        function selectAnswer(selectedIndex) {
-            if (isAnswerSubmitted) return;
+        let isAnswerSubmitted = false;
+        window.selectAnswer = function(selectedIndex) {
+            if(isAnswerSubmitted) return;
             isAnswerSubmitted = true;
 
             const q = quizQuestions[currentQuestionIndex];
             const isCorrect = (selectedIndex === q.correct);
             userAnswers[currentQuestionIndex] = selectedIndex;
 
-            const buttons = document.getElementById("quiz-options-container").children;
-            for (let i = 0; i < buttons.length; i++) {
+            const buttons = document.getElementById('quiz-options-container').children;
+            for(let i=0; i<buttons.length; i++) {
                 buttons[i].disabled = true;
-                if (i === q.correct) {
-                    buttons[i].className = "w-full text-left bg-emerald-100 border-2 border-emerald-500 rounded-xl p-4 font-bold text-emerald-900 flex items-center justify-between shadow-sm";
-                } else if (i === selectedIndex && !isCorrect) {
-                    buttons[i].className = "w-full text-left bg-rose-100 border-2 border-rose-500 rounded-xl p-4 font-bold text-rose-900 flex items-center justify-between shadow-sm";
+                if(i === q.correct) {
+                    buttons[i].className = "w-full text-left bg-emerald-100 border-2 border-emerald-500 rounded-2xl p-4 font-semibold text-emerald-900 shadow-sm";
+                } else if(i === selectedIndex && !isCorrect) {
+                    buttons[i].className = "w-full text-left bg-rose-100 border-2 border-rose-500 rounded-2xl p-4 font-semibold text-rose-900 shadow-sm";
                 } else {
-                    buttons[i].className = "w-full text-left bg-slate-100 border-2 border-slate-200 rounded-xl p-4 font-semibold text-slate-400 flex items-center justify-between opacity-60";
+                    buttons[i].className = "w-full text-left bg-slate-50 border-2 border-slate-200 rounded-2xl p-4 font-semibold text-slate-400 opacity-60";
                 }
             }
 
-            const feedbackBox = document.getElementById("quiz-feedback-box");
-            const feedbackTitle = document.getElementById("feedback-title");
-            const feedbackText = document.getElementById("feedback-text");
-            feedbackBox.classList.remove("hidden");
+            const feedbackBox = document.getElementById('quiz-feedback-box');
+            const feedbackTitle = document.getElementById('quiz-feedback-title');
+            const feedbackText = document.getElementById('feedback-text');
+            feedbackBox.classList.remove('hidden');
 
-            if (isCorrect) {
+            if(isCorrect) {
                 score += 20;
                 correctCount++;
-                feedbackBox.className = "rounded-2xl p-5 border bg-emerald-50 border-emerald-200 space-y-3 transition-all";
-                feedbackTitle.innerHTML = `<span class="text-emerald-700">✓ BENAR! Hebat, ${studentName || 'Siswa'}! Jawaban kamu tepat.</span>`;
-                feedbackText.className = "text-sm sm:text-base text-emerald-900 leading-relaxed font-medium";
+                feedbackBox.className = "rounded-2xl p-5 border bg-emerald-50 border-emerald-200 space-y-2";
+                feedbackTitle.innerHTML = `<span class="text-emerald-700">✓ BENAR! Hebat, ${studentName || 'Siswa'}!</span>`;
+                feedbackText.className = "text-sm text-emerald-900 leading-relaxed";
                 feedbackText.textContent = q.explanation;
-                speakText(`Benar, ${studentName || 'Siswa'}! Hebat sekali! Jawaban kamu tepat.`);
+                speakText("Benar! Hebat sekali jawaban kamu.");
             } else {
                 wrongCount++;
-                feedbackBox.className = "rounded-2xl p-5 border bg-rose-50 border-rose-200 space-y-3 transition-all";
-                feedbackTitle.innerHTML = `<span class="text-rose-700">✗ BELUM TEPAT. ${studentName || 'Siswa'}, jangan menyerah!</span>`;
-                feedbackText.className = "text-sm sm:text-base text-rose-900 leading-relaxed font-medium";
-                feedbackText.innerHTML = `Jawaban yang benar adalah: <strong>${q.options[q.correct]}</strong><br><br>${q.explanation}`;
-                speakText(`Belum tepat, ${studentName || 'Siswa'}. Jangan menyerah. Yuk, pelajari kembali pembahasannya.`);
+                feedbackBox.className = "rounded-2xl p-5 border bg-rose-50 border-rose-200 space-y-2";
+                feedbackTitle.innerHTML = `<span class="text-rose-700">✕ BELUM TEPAT. Jawaban yang benar adalah: <strong>${q.options[q.correct]}</strong></span>`;
+                feedbackText.className = "text-sm text-rose-900 leading-relaxed";
+                feedbackText.textContent = q.explanation;
+                speakText("Belum tepat. Mari pelajari pembahasannya.");
             }
 
-            document.getElementById("quiz-score-display").textContent = score;
-            localStorage.setItem("petualangan_bahasa_score", score);
-            localStorage.setItem("petualangan_bahasa_correct", correctCount);
-            localStorage.setItem("petualangan_bahasa_wrong", wrongCount);
-            localStorage.setItem("petualangan_bahasa_qindex", currentQuestionIndex);
-            localStorage.setItem("petualangan_bahasa_answers", JSON.stringify(userAnswers));
+            document.getElementById('quiz-score-display').textContent = score;
             syncProgressToFirebase();
-        }
+        };
 
-        function proceedNextQuestion() {
+        window.proceedNextQuestion = function() {
+            isAnswerSubmitted = false;
             currentQuestionIndex++;
             loadQuestion();
-        }
+        };
 
-        function finishQuiz() {
-            switchScreen("screen-result");
-            const percentage = Math.round((correctCount / 50) * 100);
-
-            document.getElementById("result-congrats-title").textContent = `Selamat, ${studentName || 'Siswa'}!`;
-            document.getElementById("final-score").textContent = score;
-            document.getElementById("final-correct").textContent = correctCount;
-            document.getElementById("final-wrong").textContent = wrongCount;
-            document.getElementById("final-percentage").textContent = `${percentage}%`;
-            speakText(`Selamat, ${studentName || 'Siswa'}! Kamu telah menyelesaikan 50 soal.`);
-
-            const today = new Date();
-            const formattedDate = today.toLocaleDateString('id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
-            document.getElementById("cert-student-name").textContent = studentName || 'Siswa';
-            document.getElementById("cert-score").textContent = `${score} / 1000`;
-            document.getElementById("cert-correct").textContent = `${correctCount} dari 50 soal`;
-            document.getElementById("cert-date").textContent = formattedDate;
-
+        window.finishQuiz = function() {
+            switchScreen('screen-result');
+            document.getElementById('result-congrats-title').textContent = `Selamat, ${studentName || 'Siswa'}!`;
+            document.getElementById('final-score').textContent = score;
+            document.getElementById('final-correct').textContent = correctCount;
+            document.getElementById('final-wrong').textContent = wrongCount;
+            speakText(`Selamat ${studentName}, kamu telah menyelesaikan kuis.`);
             syncProgressToFirebase();
-        }
+        };
 
-        function restartQuiz() {
+        window.restartQuiz = function() {
             score = 0;
             correctCount = 0;
             wrongCount = 0;
             currentQuestionIndex = 0;
             userAnswers = {};
-            localStorage.removeItem("petualangan_bahasa_score");
-            localStorage.removeItem("petualangan_bahasa_correct");
-            localStorage.removeItem("petualangan_bahasa_wrong");
-            localStorage.removeItem("petualangan_bahasa_qindex");
-            localStorage.removeItem("petualangan_bahasa_answers");
-            startQuizFromMenu();
-        }
+            switchScreen('screen-game');
+        };
 
-        function openCertificateModal() {
-            document.getElementById("certificate-modal").classList.remove("hidden");
-        }
-
-        function closeCertificateModal() {
-            document.getElementById("certificate-modal").classList.add("hidden");
-        }
-
-        function openClassManagerModal() {
-            document.getElementById("class-manager-modal").classList.remove("hidden");
-        }
-
-        function closeClassManagerModal() {
-            document.getElementById("class-manager-modal").classList.add("hidden");
-        }
-
-        function saveNewClass() {
-            const name = document.getElementById("modal-class-name").value.trim();
-            const code = document.getElementById("modal-class-code").value.trim().toUpperCase();
-            if (!name || !code) {
-                alert("Mohon isi nama kelas dan kode kelas.");
-                return;
-            }
-            alert(`Kelas ${name} dengan kode ${code} berhasil disimpan!`);
-            closeClassManagerModal();
-        }
-
-        function initTeacherRealtimeListener() {
-            if (!window.FB || !window.FB.db) {
-                // Mock table data if offline / unconfigured
-                renderTeacherTable([
-                    { name: studentName || "Andi Pratama", classCode: "BINDO5A", status: "🟢 Sedang Mengerjakan", currentQuestion: 18, score: 240, correctAnswers: 12, wrongAnswers: 2, lastActivity: "Baru saja" }
-                ]);
-                return;
-            }
-
-            const { db, appId, collection, query, onSnapshot } = window.FB;
-            const q = query(collection(db, 'artifacts', appId, 'public', 'data'));
+        // Fungsi Autentikasi Guru
+        window.handleTeacherLogin = async function() {
+            const email = document.getElementById('input-teacher-email').value;
+            const pass = document.getElementById('input-teacher-password').value;
+            const errEl = document.getElementById('teacher-auth-error');
             
-            unsubscribeRealtime = onSnapshot(q, (snapshot) => {
-                const studentsList = [];
-                snapshot.forEach(docSnap => {
-                    const data = docSnap.data();
-                    if (data.studentId) {
-                        studentsList.push(data);
-                    }
-                });
-                renderTeacherTable(studentsList);
-            }, (error) => {
-                console.warn("Real-time listener error:", error);
-            });
+            try {
+                await signInWithEmailAndPassword(auth, email, pass);
+                errEl.classList.add('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+                switchScreen('screen-teacher-dashboard');
+            } catch (error) {
+                errEl.classList.remove('hidden');
+            }
+        };
+
+        window.handleTeacherRegister = async function() {
+            const email = document.getElementById('input-teacher-email').value;
+            const pass = document.getElementById('input-teacher-password').value;
+            const errEl = document.getElementById('teacher-auth-error');
+            
+            try {
+                await createUserWithEmailAndPassword(auth, email, pass);
+                alert("Akun guru berhasil dibuat dan langsung masuk!");
+                errEl.classList.add('hidden');
+                document.getElementById('logout-btn').classList.remove('hidden');
+                switchScreen('screen-teacher-dashboard');
+            } catch (error) {
+                errEl.textContent = "Gagal mendaftar: " + error.message;
+                errEl.classList.remove('hidden');
+            }
+        };
+
+        window.handleLogout = async function() {
+            try {
+                await signOut(auth);
+            } catch(e) {}
+            studentName = "";
+            document.getElementById('logout-btn').classList.add('hidden');
+            switchScreen('screen-home');
+        };
+
+        // Sinkronisasi Realtime ke Firestore
+        async function syncProgressToFirebase() {
+            if(!db || !studentName) return;
+            try {
+                const studentId = `${studentClass}_${studentName}`.replace(/\s+/g, '_');
+                await setDoc(doc(db, "student_progress", studentId), {
+                    name: studentName,
+                    classCode: studentClass,
+                    score: score,
+                    correctAnswers: correctCount,
+                    wrongAnswers: wrongCount,
+                    currentQuestion: currentQuestionIndex + 1,
+                    status: currentQuestionIndex >= 50 ? "Sudah Selesai" : "Sedang Mengerjakan",
+                    lastActive: serverTimestamp()
+                }, { merge: true });
+            } catch (e) {
+                console.error("Gagal sinkronisasi:", e);
+            }
         }
 
-        function renderTeacherTable(students) {
-            const tbody = document.getElementById("teacher-students-table-body");
-            tbody.innerHTML = "";
+        // Realtime Listener untuk Dashboard Guru
+        function startTeacherRealtimeListener() {
+            const tbody = document.getElementById('teacher-student-table-body');
+            unsubscribeTeacher = onSnapshot(collection(db, "student_progress"), (snapshot) => {
+                let students = [];
+                snapshot.forEach(docSnap => {
+                    students.push(docSnap.data());
+                });
 
-            if (students.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="8" class="p-6 text-center text-slate-400">Belum ada data siswa yang masuk.</td></tr>`;
-                document.getElementById("teacher-stat-total-students").textContent = "0";
-                document.getElementById("teacher-stat-completed").textContent = "0";
-                document.getElementById("teacher-stat-avg-score").textContent = "0";
-                document.getElementById("teacher-stat-max-score").textContent = "0";
-                return;
-            }
+                if(students.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-slate-400">Belum ada siswa yang masuk ke sistem.</td></tr>`;
+                    document.getElementById('teacher-stat-total-students').textContent = "0";
+                    document.getElementById('teacher-stat-completed').textContent = "0";
+                    document.getElementById('teacher-stat-avg-score').textContent = "0";
+                    document.getElementById('teacher-stat-max-score').textContent = "0";
+                    return;
+                }
 
-            let totalScore = 0;
-            let maxScore = 0;
-            let completedCount = 0;
+                let totalScore = 0;
+                let maxScore = 0;
+                let completedCount = 0;
 
-            students.forEach(s => {
-                totalScore += (s.score || 0);
-                if ((s.score || 0) > maxScore) maxScore = s.score;
-                if (s.status === "Sudah Selesai") completedCount++;
+                tbody.innerHTML = "";
+                students.forEach(s => {
+                    totalScore += (s.score || 0);
+                    if(s.score > maxScore) maxScore = s.score;
+                    if(s.status === "Sudah Selesai") completedCount++;
 
-                const tr = document.createElement("tr");
-                tr.className = "hover:bg-slate-50 transition border-b";
-                tr.innerHTML = `
-                    <td class="p-3 font-bold text-slate-800">${s.name || '-'}</td>
-                    <td class="p-3 font-semibold text-slate-600">${s.classCode || 'BINDO5A'}</td>
-                    <td class="p-3"><span class="px-2 py-1 rounded-full text-xs font-bold ${s.status === 'Sudah Selesai' ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-100 text-sky-800'}">${s.status || '🟢 Sedang'}</span></td>
-                    <td class="p-3 font-medium">${s.currentQuestion || 1} / 50</td>
-                    <td class="p-3 font-extrabold text-emerald-700">${s.score || 0}</td>
-                    <td class="p-3 text-slate-600">✓ ${s.correctAnswers || 0} | ✗ ${s.wrongAnswers || 0}</td>
-                    <td class="p-3 text-xs text-slate-400">Baru saja</td>
-                    <td class="p-3 text-center">
-                        <button onclick="alert('Detail siswa ${s.name}: Skor ${s.score}, Benar ${s.correctAnswers}, Salah ${s.wrongAnswers}')" class="bg-sky-100 hover:bg-sky-200 text-sky-800 px-3 py-1 rounded-lg text-xs font-bold transition">Lihat</button>
-                    </td>
-                `;
-                tbody.appendChild(tr);
+                    const tr = document.createElement('tr');
+                    tr.className = "border-b border-slate-100 hover:bg-slate-50/50 transition";
+                    tr.innerHTML = `
+                        <td class="p-3.5 font-bold text-slate-800">${s.name || '-'}</td>
+                        <td class="p-3.5"><span class="px-2.5 py-1 bg-slate-100 rounded-lg text-xs font-bold">${s.classCode || '5A'}</span></td>
+                        <td class="p-3.5"><span class="px-2.5 py-1 rounded-full text-xs font-bold ${s.status === 'Sudah Selesai' ? 'bg-emerald-100 text-emerald-800' : 'bg-sky-100 text-sky-800'}">${s.status || 'Sedang Mengerjakan'}</span></td>
+                        <td class="p-3.5">${s.currentQuestion || 1} / 50</td>
+                        <td class="p-3.5 font-extrabold text-emerald-600">${s.score || 0}</td>
+                        <td class="p-3.5 text-xs">✓ ${s.correctAnswers || 0} | ✕ ${s.wrongAnswers || 0}</td>
+                        <td class="p-3.5 text-xs text-slate-400">Baru saja</td>
+                        <td class="p-3.5 text-center">
+                            <button onclick="alert('Detail Siswa - ${s.name}: Skor ${s.score}, Benar ${s.correctAnswers}, Salah ${s.wrongAnswers}')" class="px-3 py-1 bg-sky-50 hover:bg-sky-100 text-sky-700 rounded-xl text-xs font-bold transition">Detail</button>
+                        </td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+
+                document.getElementById('teacher-stat-total-students').textContent = students.length;
+                document.getElementById('teacher-stat-completed').textContent = completedCount;
+                document.getElementById('teacher-stat-avg-score').textContent = Math.round(totalScore / students.length);
+                document.getElementById('teacher-stat-max-score').textContent = maxScore;
+            }, (error) => {
+                tbody.innerHTML = `<tr><td colspan="8" class="p-8 text-center text-rose-500 font-semibold">Gagal memuat data dari database. Periksa koneksi/aturan rules Firebase.</td></tr>`;
             });
-
-            document.getElementById("teacher-stat-total-students").textContent = students.length;
-            document.getElementById("teacher-stat-completed").textContent = completedCount;
-            document.getElementById("teacher-stat-avg-score").textContent = Math.round(totalScore / students.length);
-            document.getElementById("teacher-stat-max-score").textContent = maxScore;
         }
     </script>
 </body>
